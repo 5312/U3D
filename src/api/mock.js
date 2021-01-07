@@ -72,4 +72,16 @@ Mock.mock(base + apiUrl.plane, 'get', {
                     ],//平移向量
                 }],
         }]
+});
+Mock.mock(base + apiUrl.homme, 'get', {
+    code: 1,
+    message: '隧道',
+    "data|2": [
+        {
+            width: 80,
+            height: 80,
+            deep: 1000,
+            rotate: Math.PI / 4,
+        }
+    ]
 })

@@ -1,26 +1,6 @@
-import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import TWEEN from '@tweenjs/tween.js'
-class Main {
-    constructor(element, callback) {
-        //canvas获取不到宽高,所以取父元素宽高
-        let wrap = element.parentNode;
-        //场景
-        this.scene = new THREE.Scene();
-        //相机
-        this.camera = new THREE.PerspectiveCamera(75, wrap.clientWidth / wrap.clientHeight, 0.1, 2000);
-        this.camera.position.set(0, 0, 900);
-        //渲染器
-        this.renderer = new THREE, WebGLRenderer({
-            antialias: true,//抗锯齿
-            canvas: element,
-            preserveDrawingBuffer: true
-        })
-        this.renderer.setSize(wrap.clientWidth, wrap.clientHeight);
-        this.renderer.setClearColor('#004085', 1);//默认背景色
-        callback(this.scene)
-    }
-}
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import TWEEN from '@tweenjs/tween.js';
 const main = function (element, callback) {
     // 场景
     var scene = new THREE.Scene();

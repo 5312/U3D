@@ -8,28 +8,20 @@ import Tunnel from './home.js'
 export default {
   name: 'Home',
   components: {},
-  setup() {
-     
-    return {
-
-    }
-  },
   data() {
     return {
       data: '',
     }
   },
   setup(){
-    
-    return {
-     
-    }
+    return {}
   },
   mounted() {
       let e = this;
       let canvas = document.getElementById('canvas1')
       e.$main(canvas,  (scene) => {
-        let tunnel = new Tunnel(scene)
+        let tunnel = new Tunnel(scene);
+        tunnel.init();
       })
   },
   methods: {
@@ -49,3 +41,4 @@ export default {
   }
 }
 </style>
+ 
