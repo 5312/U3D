@@ -16,17 +16,17 @@ const main = function (element, callback) {
         preserveDrawingBuffer: true,
     }); // 创建渲染器
     renderer.setSize(wrap.clientWidth, wrap.clientHeight); // 设置画布大小
-    renderer.setClearColor('#00123C', 1); // 设置默认背景色
+    renderer.setClearColor('#244780', 1); // 设置默认背景色
     callback(scene) //需要将物品添加入场景
     //角度
     let rot = 0;
     //星空
     function init() {
         // フォグを作成
-        scene.fog = new THREE.Fog(0xaaaaaa, 50, 2000);
+        scene.fog = new THREE.Fog(0xaaaaaa, 1, 3000);
         // 形状データを作成
         const geometry = new THREE.Geometry();
-
+        console.log(geometry)
         for (let i = 0; i < 10000; i++) {
             const star = new THREE.Vector3();
             star.x = THREE.Math.randFloatSpread(2000);

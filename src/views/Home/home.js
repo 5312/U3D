@@ -23,24 +23,41 @@ class Tunnel {
    * @memberof Tunnel
    */
   init() {
-    let deep = this.data.deep;
-    let width = this.data.width;
-    let height = this.data.height;
-    /** @type {*物体} */
-    let geometry = new THREE.PlaneBufferGeometry(deep, width, height);
+    let deep = this.data[0].deep;
+    let width = this.data[0].width;
+    let height = this.data[0].height;
+    /** @type {*盒子缓存模型} */
+    let geometry = new THREE.BoxBufferGeometry(deep, width, height, 2, 2, 2);
 
     /** @type {*材质} */
     let material = new THREE.MeshBasicMaterial({
-      color: '#000',
+      color: '#244780',
+      wireframe: true
     });
 
     let mesh = new THREE.Mesh(geometry, material);
 
+    /** @type {边框} */
+    let edges = new THREE.EdgesGeometry(geometry, 2);
+
+    /** @type {边框材质} */
+    let edgesLine = new THREE.LineBasicMaterial({ color: '#fff' })
+    // edgesLine.depthTest = true;//深度测试，开启则边框透明
+    let meshLine = new THREE.LineSegments(edges, edgesLine);
+
+    mesh.add(meshLine);
     this.group.add(mesh);
 
-
-
     this.scene.add(this.group)
+  }
+  // 位置
+  position() {
+    var axis = new THREE.Vector3(-2, 0, 1); // 旋转向量
+    var trans = new THREE.Vector3(-2, 0, -1); // 平移向量
+
+    this.group.translateOnAxis(trans, this.data[0].width + 100); //沿平移
+
+    this.group.rotateOnAxis(axis, Math.PI / 4); //旋转45'
   }
 }
 export default Tunnel;

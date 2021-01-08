@@ -73,14 +73,14 @@ Mock.mock(base + apiUrl.plane, 'get', {
                 }],
         }]
 });
-Mock.mock(base + apiUrl.homme, 'get', {
+Mock.mock(base + apiUrl.home, 'get', {
     code: 1,
     message: '隧道',
     "data|2": [
         {
-            width: 80,
-            height: 80,
-            deep: 1000,
+            width: 100,
+            height: 100,
+            deep: 30000,
             rotate: Math.PI / 4,
         }
     ]
