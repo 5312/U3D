@@ -14,25 +14,38 @@ class Tunnel {
     this.scene = scene;
     this.data = data;
     this.group = new THREE.Group();
-    this.group.name = 'tunnel'
   }
 
   /**
    * @description 初始化
-   * @param {whd}
+   * @param {ajax-res}}
    * @memberof Tunnel
    */
   init() {
-    let deep = this.data[0].deep;
-    let width = this.data[0].width;
-    let height = this.data[0].height;
+    let len = this.data.length;
+    for (let i = 0; i < len; i++) {
+      const miss = this.data[i];
+      this.module(miss);
+    }
+  }
+  /**
+   * @description 组
+   * @author YF
+   * @date 09/01/2021
+   * @param {*} data
+   * @memberof Tunnel
+   */
+  module(data) {
+    let deep = data.deep;
+    let width = data.width;
+    let height = data.height;
     /** @type {*盒子缓存模型} */
     let geometry = new THREE.BoxBufferGeometry(deep, width, height, 2, 2, 2);
 
     /** @type {*材质} */
     let material = new THREE.MeshBasicMaterial({
       color: '#244780',
-      wireframe: true
+      // wireframe: true
     });
 
     let mesh = new THREE.Mesh(geometry, material);
@@ -41,23 +54,36 @@ class Tunnel {
     let edges = new THREE.EdgesGeometry(geometry, 2);
 
     /** @type {边框材质} */
-    let edgesLine = new THREE.LineBasicMaterial({ color: '#fff' })
+    let edgesLine = new THREE.LineBasicMaterial({ color: '#fff' });
     // edgesLine.depthTest = true;//深度测试，开启则边框透明
     let meshLine = new THREE.LineSegments(edges, edgesLine);
 
     mesh.add(meshLine);
+    // 创建组
+
+    // 添加物体
     this.group.add(mesh);
-
-    this.scene.add(this.group)
+    // 物体位置
+    this.scene.add(this.group);
+    // 物体位置
+    this.position(data.name, data.axis, data.tran, data.position);
   }
-  // 位置
-  position() {
-    var axis = new THREE.Vector3(-2, 0, 1); // 旋转向量
-    var trans = new THREE.Vector3(-2, 0, -1); // 平移向量
 
-    this.group.translateOnAxis(trans, this.data[0].width + 100); //沿平移
-
-    this.group.rotateOnAxis(axis, Math.PI / 4); //旋转45'
+  /**
+   * @description 位置
+   * @author YF
+   * @date 08/01/2021
+   * @memberof Tunnel
+   */
+  position(name, rota, tran, position) {
+    var axis = new THREE.Vector3(rota.x, rota.y, rota.z); // 旋转向量
+    var trans = new THREE.Vector3(tran.x, tran.y, tran.z); // 平移向量
+    let group = this.scene.getObjectByName(name);
+    if (!group) {
+      group = this.group
+    }
+    group.translateOnAxis(trans, position.translate); //沿平移
+    group.rotateOnAxis(axis, position.rotate); //旋转45'
   }
 }
 export default Tunnel;

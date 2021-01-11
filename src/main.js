@@ -7,7 +7,7 @@ import api from './api/api';
 
 
 
-import './api/mock';
+// import './api/mock';
 const app = createApp(App)
 
 app.config.globalProperties.$api = api.apis;

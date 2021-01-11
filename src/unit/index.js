@@ -6,7 +6,7 @@ const main = function (element, callback) {
     var scene = new THREE.Scene();
     // 创建相机Camera
     let wrap = element.parentNode;
-    var camera = new THREE.PerspectiveCamera(75, wrap.clientWidth / wrap.clientHeight, 0.1, 2000);
+    var camera = new THREE.PerspectiveCamera(70, wrap.clientWidth / wrap.clientHeight, 10, 20000);
     camera.position.set(0, 0, 900);
 
     // 创建渲染器Renderer
@@ -17,6 +17,10 @@ const main = function (element, callback) {
     }); // 创建渲染器
     renderer.setSize(wrap.clientWidth, wrap.clientHeight); // 设置画布大小
     renderer.setClearColor('#244780', 1); // 设置默认背景色
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    // 平心光--模拟太阳光
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    scene.add(directionalLight);
     callback(scene) //需要将物品添加入场景
     //角度
     let rot = 0;
@@ -26,7 +30,6 @@ const main = function (element, callback) {
         scene.fog = new THREE.Fog(0xaaaaaa, 1, 3000);
         // 形状データを作成
         const geometry = new THREE.Geometry();
-        console.log(geometry)
         for (let i = 0; i < 10000; i++) {
             const star = new THREE.Vector3();
             star.x = THREE.Math.randFloatSpread(2000);
@@ -44,15 +47,20 @@ const main = function (element, callback) {
         scene.add(starField);
     }
     init();
+    // 创建视图控制器OrbitControls，鼠标控制
+    var controls = new OrbitControls(camera, element);
+    controls.enablePan = true; //右键拖拽
+
     // 渲染函数
     function render() {
+        requestAnimationFrame(render);
+
+        controls.update();
 
         TWEEN.update();
         renderer.render(scene, camera);
-        requestAnimationFrame(render);
     }
-    render()
-
+    render();
     window.addEventListener("resize", onResize);
 
     function onResize() {
@@ -66,9 +74,6 @@ const main = function (element, callback) {
         camera.updateProjectionMatrix();
     }
     onResize();
-    // 创建视图控制器OrbitControls，鼠标控制
-    var controls = new OrbitControls(camera, element);
-    controls.addEventListener('change', render);
-    controls.enablePan = true; //右键拖拽
+
 }
 export default main;

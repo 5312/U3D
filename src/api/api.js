@@ -1,14 +1,14 @@
 import http from './serive.js';
 
 const apiUrl = {
-    home:'/src/views/Home/h',
-    plane: '/src/views/Plane/plane',
+    home: 'home/h',
+    plane: 'Plane/plane',
 }
 export { apiUrl };
 export default {
     apis: {
-        home:params => {
-            return http.get(apiUrl.home,params);
+        home: params => {
+            return http.get(apiUrl.home, params);
         },
         plane1: params => {
             return http.get(apiUrl.plane, params);

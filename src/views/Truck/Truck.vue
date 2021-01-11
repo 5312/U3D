@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import truck from '../../module/truck.js'
+import truck from './Truck.js'
 import TWEEN from '@tweenjs/tween.js'
 
 export default {
@@ -39,16 +39,16 @@ export default {
         const obj = await truck(scene).catch((err) => {
           console.log(err)
         })
-        var position = { x: 850 }
-        var target = { x: -850 }
-        var tween = new TWEEN.Tween(position).to(target, 20000)
-        tween
-          .onUpdate(function () {
-            obj.position.x = position.x
-          })
-          .easing(TWEEN.Easing.Quadratic.Out)
-          .start()
-          .repeat(Infinity)
+        // var position = { x: 850 }
+        // var target = { x: -850 }
+        // var tween = new TWEEN.Tween(position).to(target, 20000)
+        // tween
+        //   .onUpdate(function () {
+        //     obj.position.x = position.x
+        //   })
+        //   .easing(TWEEN.Easing.Quadratic.Out)
+        //   .start()
+        //   .repeat(Infinity)
       })
     },
   },

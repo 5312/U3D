@@ -34,7 +34,7 @@
          /** @type { 创建隧道 }*/
          let tunnel = new Tunnel(scene,this.data);
          tunnel.init();//初始化
-         tunnel.position();
+         console.log(scene)
        })
      },
    },

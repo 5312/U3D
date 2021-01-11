@@ -3,12 +3,13 @@ import axios from 'axios'
 //axios配置
 const http = axios.create({
     method: 'get',
-    baseURL: 'http://localhost:3000/', //请求的url前缀
-    withCredentials: true, //开启withCredentials后，服务器才能拿到你的cookie，当然后端服务器也要设置允许你获取你开启了才有用
+    baseURL: 'http://localhost:3021/', //请求的url前缀
+    withCredentials: false, //开启withCredentials后，服务器才能拿到你的cookie，当然后端服务器也要设置允许你获取你开启了才有用
     timeout: 5000, //请求超时
     headers: { //headers设置 如缓存等 没需求的话都可以不需要
         'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        // 'Access-Control-Allow-Origin': '',
+        'Content-Type': 'text/html; charset=utf-8'
     }
 });
 
@@ -18,11 +19,13 @@ http.interceptors.request.use(config => {
     // 判断localStorage 或者 SessionStorage 内有无token 进行相应处理 此处简单的做了个赋值token操作
     // let token = localStorage.getItem('mytoken');
     // config.headers['Authorization'] = token;
+    console.log(config)
     return config;
 }, err => { return Promise.reject(err); });
 
 // axios 响应拦截；
 http.interceptors.response.use(res => {
+    console.log(res)
     if (res.data.code == 0) {
         return Promise.reject(res.data.message);
     }
