@@ -19,13 +19,13 @@ http.interceptors.request.use(config => {
     // 判断localStorage 或者 SessionStorage 内有无token 进行相应处理 此处简单的做了个赋值token操作
     // let token = localStorage.getItem('mytoken');
     // config.headers['Authorization'] = token;
-    console.log(config)
+    // console.log(config)
     return config;
 }, err => { return Promise.reject(err); });
 
 // axios 响应拦截；
 http.interceptors.response.use(res => {
-    console.log(res)
+
     if (res.data.code == 0) {
         return Promise.reject(res.data.message);
     }

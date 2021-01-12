@@ -10,10 +10,13 @@ import { Vector3 } from 'three';
  * @class Tunnel
  */
 class Tunnel {
-  constructor(scene, data) {
+  constructor(scene, group) {
     this.scene = scene;
-    this.data = data;
+    this.data = group.data;
+    this.position = group.position
+    this.rotation = group.rotation
     this.group = new THREE.Group();
+    this.group.name = group.name;
   }
 
   /**
@@ -27,9 +30,10 @@ class Tunnel {
       const miss = this.data[i];
       this.module(miss);
     }
+    this.groupPosition();
   }
   /**
-   * @description 组
+   * @description 组--两条为一组
    * @author YF
    * @date 09/01/2021
    * @param {*} data
@@ -55,35 +59,30 @@ class Tunnel {
 
     /** @type {边框材质} */
     let edgesLine = new THREE.LineBasicMaterial({ color: '#fff' });
-    // edgesLine.depthTest = true;//深度测试，开启则边框透明
+    edgesLine.depthTest = true;//深度测试，开启则边框透明
     let meshLine = new THREE.LineSegments(edges, edgesLine);
 
     mesh.add(meshLine);
-    // 创建组
-
+    mesh.position.set(data.position.x, data.position.y, data.position.z)
+    mesh.rotation.set(data.rotation.x, data.rotation.y, data.rotation.z)
     // 添加物体
     this.group.add(mesh);
     // 物体位置
     this.scene.add(this.group);
-    // 物体位置
-    this.position(data.name, data.axis, data.tran, data.position);
+
   }
 
   /**
-   * @description 位置
+   * @description 
    * @author YF
-   * @date 08/01/2021
+   * @date 12/01/2021
    * @memberof Tunnel
    */
-  position(name, rota, tran, position) {
-    var axis = new THREE.Vector3(rota.x, rota.y, rota.z); // 旋转向量
-    var trans = new THREE.Vector3(tran.x, tran.y, tran.z); // 平移向量
-    let group = this.scene.getObjectByName(name);
-    if (!group) {
-      group = this.group
-    }
-    group.translateOnAxis(trans, position.translate); //沿平移
-    group.rotateOnAxis(axis, position.rotate); //旋转45'
+  groupPosition() {
+    let group = this.scene.getObjectByName(this.group.name);
+    if (!group) group = this.group
+    group.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z)
+    group.position.set(this.position.x, this.position.y, this.position.z)
   }
 }
 export default Tunnel;

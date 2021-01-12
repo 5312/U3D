@@ -11,7 +11,7 @@
          <span :class="[isActive?'active':'','link']" @click="navigate">车辆模型加载</span>
         </router-link>
         <router-link to="blue" custom v-slot="{ navigate, isActive }">
-          <span :class="[isActive?'active':'','link']" @click="navigate">blue</span>
+          <span :class="[isActive?'active':'','link']" @click="navigate">背景</span>
         </router-link>
     </div>
    <div class="view">

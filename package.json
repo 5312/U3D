@@ -2,7 +2,7 @@
   "name": "U3D",
   "version": "1.0.0",
   "scripts": {
-    "dev": "vite & node ./src/api/mock/mock.js",
+    "dev": "nodemon ./src/api/mock/mock.js & vite",
     "build": "vite build"
   },
   "dependencies": {

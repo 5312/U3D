@@ -8,48 +8,53 @@ app.get('/home/h', function (req, res) {
   res.json(Mock.mock({
     code: 1,
     message: '隧道',
-    "data|2": [
-      {
-        "name": '@first',
-        width: 100,
-        height: 100,
-        deep: 20000,
-        "axis|+1": [
-          {
-            x: 0,
-            y: 0,
-            z: 0.5
-          },
-          {
-            x: 0,
-            y: 0,
-            z: 0
-          },
-        ],//平移向量
-        "tran|+1": [
-          {
-            x: 0,
-            y: 0,
-            z: 0
-          },
-          {
-            x: 0,
-            y: 0,
-            z: 0
-          },
-        ],//平移向量
-        "position|+1": [
-          {
-            rotate: Math.PI,
-            translate: 100
-          },
-          {
-            rotate: Math.PI,
-            translate: 0
-          }
-        ]
-      }
-    ]
+    "group": {
+      "name": '@first',
+      "position|+1": [
+        {
+          x: 500,
+          y: 0,
+          z: 0
+        }
+      ],
+      "rotation|+1": [
+        {
+          x: -0.11,
+          y: 0.93,
+          z: 0.38
+        }
+      ],
+      "data|2": [
+        {
+          "name": '@first',
+          width: 100,
+          height: 100,
+          deep: 20000,
+          "position|+1": [
+            {
+              x: 0,
+              y: 0,
+              z: 0
+            }, {
+              x: 0,
+              y: 0,
+              z: -300
+            }
+          ],
+          "rotation|+1": [
+            {
+              x: 0,
+              y: 0,
+              z: 0
+            }, {
+              x: 0,
+              y: 0,
+              z: 0
+            }
+          ]
+        }
+      ]
+    }
   }))
 })
 app.get('/Plane/plane', function (req, res) {
@@ -127,6 +132,6 @@ app.get('/Plane/plane', function (req, res) {
   }))
 })
 app.listen('3021', () => {
-  console.log('监听端口 3021')
+  console.log('reload--> 3021')
 })
 

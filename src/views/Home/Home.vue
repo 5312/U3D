@@ -19,8 +19,8 @@
    mounted() {
      this.$api.home()
          .then( res => {
-           console.log(res)
-           this.data = res.data
+           this.data = res.group
+           console.log(res.group)
            this.init();
          }).catch( err => {
            console.log(err)
@@ -34,7 +34,6 @@
          /** @type { 创建隧道 }*/
          let tunnel = new Tunnel(scene,this.data);
          tunnel.init();//初始化
-         console.log(scene)
        })
      },
    },
