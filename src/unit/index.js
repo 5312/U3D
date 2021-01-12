@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import TWEEN from '@tweenjs/tween.js';
+
 const main = function (element, callback) {
     // 场景
     var scene = new THREE.Scene();
@@ -21,9 +22,19 @@ const main = function (element, callback) {
     // 平心光--模拟太阳光
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     scene.add(directionalLight);
-    callback(scene) //需要将物品添加入场景
-    //角度
-    let rot = 0;
+
+    //需要将物品添加入场景
+    callback(scene)
+
+    // 适应浏览器大小
+    window.addEventListener("resize", onResize);
+    // 创建视图控制器OrbitControls，鼠标控制
+    var controls = new OrbitControls(camera, element);
+    controls.enablePan = true; //右键拖拽
+
+    init();
+    render();
+    onResize();
     //星空
     function init() {
         // フォグを作成
@@ -46,11 +57,6 @@ const main = function (element, callback) {
         const starField = new THREE.Points(geometry, material);
         scene.add(starField);
     }
-    init();
-    // 创建视图控制器OrbitControls，鼠标控制
-    var controls = new OrbitControls(camera, element);
-    controls.enablePan = true; //右键拖拽
-
     // 渲染函数
     function render() {
         requestAnimationFrame(render);
@@ -60,9 +66,7 @@ const main = function (element, callback) {
         TWEEN.update();
         renderer.render(scene, camera);
     }
-    render();
-    window.addEventListener("resize", onResize);
-
+    // 适应函数
     function onResize() {
 
         const width = wrap.clientWidth;
@@ -73,7 +77,18 @@ const main = function (element, callback) {
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
     }
-    onResize();
 
 }
+class VueThreeJs {
+    constructor() {
+        this.scene = new THREE.Scene();
+    }
+
+}
+// export default {
+//     install: (app, options) => {
+
+//     }
+// }
 export default main;
+
