@@ -1,44 +1,75 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import TWEEN from '@tweenjs/tween.js';
+/**
+ * @description 基类
+ * @author YF
+ * @date 14/01/2021
+ * @class Vthree
+ */
+class Vthree {
+    constructor() {
+        this.element = null;
+        this.wrap = null //this.element.parentNode;
 
-const main = function (element, callback) {
-    // 场景
-    var scene = new THREE.Scene();
-    // 创建相机Camera
-    let wrap = element.parentNode;
-    var camera = new THREE.PerspectiveCamera(70, wrap.clientWidth / wrap.clientHeight, 10, 20000);
-    camera.position.set(0, 0, 900);
+        this.before();
+        // 创建相机Camera
+        // 场景
+        this.scene = new THREE.Scene();
+        // 相机
+        let width = this.wrap ? this.wrap.clientWidth : window.innerWidth;
+        let height = this.wrap ? this.wrap.clientHeight : window.innerHeight;
+        this.camera = new THREE.PerspectiveCamera(70, width / height, 10, 20000);
+        // 创建渲染器Rendere
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true, // 是否执行抗锯齿
+            canvas: this.element,
+            preserveDrawingBuffer: true,
+        });
+        // 创建视图控制器OrbitControls，鼠标控制
+        this.controls = new OrbitControls(this.camera, this.element);
+    }
+    /**
+ * @description 创建时进行一些初始化
+ */
+    createInit() {
+        // 相机设置
+        this.camera.position.set(0, 0, 900);
+        // 设置默认背景色
+        this.renderer.setClearColor('#244780', 1);
+        this.renderer.outputEncoding = THREE.sRGBEncoding;
+        //开启阴影渲染
+        this.renderer.shadowMap = true;
+        //右键拖拽
+        this.controls.enablePan = true;
 
-    // 创建渲染器Renderer
-    var renderer = new THREE.WebGLRenderer({
-        antialias: true, // 是否执行抗锯齿
-        canvas: element,
-        preserveDrawingBuffer: true,
-    }); // 创建渲染器
-    renderer.setSize(wrap.clientWidth, wrap.clientHeight); // 设置画布大小
-    renderer.setClearColor('#244780', 1); // 设置默认背景色
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    // 平心光--模拟太阳光
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    scene.add(directionalLight);
+        // 适应浏览器大小
+        window.addEventListener("resize", this.onResize.bind(this));
 
-    //需要将物品添加入场景
-    callback(scene)
-
-    // 适应浏览器大小
-    window.addEventListener("resize", onResize);
-    // 创建视图控制器OrbitControls，鼠标控制
-    var controls = new OrbitControls(camera, element);
-    controls.enablePan = true; //右键拖拽
-
-    init();
-    render();
-    onResize();
+        this.star();
+        this.render();
+    }
+    /** @description 创建画布  */
+    before() {
+        let canvas = document.createElement('canvas')
+        this.element = canvas;
+    }
+    mount(wrap) {
+        // 挂载元素
+        let div = document.querySelectorAll(wrap)[0];
+        div.appendChild(this.element)
+        // wrap 设置画布大小
+        this.wrap = div;
+        this.element.width = div.clientWidth;
+        this.element.height = div.clientHeight;
+        // 初始化 - 自适应
+        this.createInit();
+        this.onResize();
+    }
     //星空
-    function init() {
+    star() {
         // フォグを作成
-        scene.fog = new THREE.Fog(0xaaaaaa, 1, 3000);
+        this.scene.fog = new THREE.Fog(0xaaaaaa, 1, 30000);
         // 形状データを作成
         const geometry = new THREE.Geometry();
         for (let i = 0; i < 10000; i++) {
@@ -49,46 +80,46 @@ const main = function (element, callback) {
 
             geometry.vertices.push(star)
         }
-
         // マテリアルを作成
         const material = new THREE.PointsMaterial({
-            color: 0xffffff
+            color: 0xffffff,
+            size: 0.1,
+            transparent: true,//使材质透明
+            blending: THREE.AdditiveBlending,
+            depthTest: false,//深度测试关闭，不消去场景的不可见面
+            // map: createLightMateria()//刚刚创建的粒子贴图就在这里用上
         });
         const starField = new THREE.Points(geometry, material);
-        scene.add(starField);
+        this.scene.add(starField);
     }
     // 渲染函数
-    function render() {
-        requestAnimationFrame(render);
+    render() {
+        requestAnimationFrame(this.render.bind(this));
 
-        controls.update();
+        this.controls.update();
 
         TWEEN.update();
-        renderer.render(scene, camera);
+        this.renderer.render(this.scene, this.camera);
     }
     // 适应函数
-    function onResize() {
+    onResize() {
+        // 相机   
+        let width = this.wrap ? this.wrap.clientWidth : window.innertWidth;
+        let height = this.wrap ? this.wrap.clientHeight : window.innerHeight;
 
-        const width = wrap.clientWidth;
-        const height = wrap.clientHeight;
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(width, height);
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setSize(width, height);
 
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
     }
+    add() {
 
-}
-class VueThreeJs {
-    constructor() {
-        this.scene = new THREE.Scene();
     }
-
 }
-// export default {
-//     install: (app, options) => {
+export default {
+    install: (app, options) => {
 
-//     }
-// }
-export default main;
-
+        app.config.globalProperties.$vthree = new Vthree;
+    }
+}

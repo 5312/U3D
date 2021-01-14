@@ -1,6 +1,5 @@
 <template>
   <div class="blue">
-    <canvas id="canvas1"></canvas>
   </div>
 </template>
 <script>
@@ -16,7 +15,7 @@
    setup(){
      return {}
    },
-   mounted() {
+   created() {
      this.$api.home()
          .then( res => {
            this.data = res.group
@@ -28,24 +27,21 @@
    },
    methods: {
      init() {
-       let e = this;
-       let canvas = document.getElementById('canvas1')
-       e.$main(canvas,  (scene,) => {
-         /** @type { 创建隧道 }*/
-         let tunnel = new Tunnel(scene,this.data);
-         tunnel.init();//初始化
-       })
+       // 挂载 
+      this.$vthree.mount('.blue')
+      /** @type { 创建隧道 }*/
+      let tunnel = new Tunnel(this.$vthree.scene,this.data);
+      //初始化
+      tunnel.init();
      },
    },
+
  }
 </script>
 <style lang="scss" scope>
 .blue {
   width: 100%;
   height:100%;
-  #canvas1 {
-    width: 100%;
-    height: 100%;
-  }
+
 }
 </style>

@@ -33,13 +33,10 @@ export default {
   },
   methods: {
     init() {
-      let e = this
-      let canvas = document.getElementById('canvas')
-     
-      e.$main(canvas, async (scene) => {
-        planeBlack(e.data, scene) //管道
-        console.log(scene)
-      })
+        // 挂载 
+      this.$vthree.mount('.blue')
+      planeBlack(e.data, this.$vthree.scene) //管道
+
     },
   },
 }

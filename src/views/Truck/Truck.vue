@@ -32,24 +32,22 @@ export default {
   },
   methods: {
     init() {
-      let e = this
-      let canvas = document.getElementById('canvas')
-     
-      e.$main(canvas, async (scene) => {
-        const obj = await truck(scene).catch((err) => {
+      // 挂载 
+      this.$vthree.mount('.blue')
+      const obj = await truck(this.$vthree.scene).catch((err) => {
           console.log(err)
         })
-        // var position = { x: 850 }
-        // var target = { x: -850 }
-        // var tween = new TWEEN.Tween(position).to(target, 20000)
-        // tween
-        //   .onUpdate(function () {
-        //     obj.position.x = position.x
-        //   })
-        //   .easing(TWEEN.Easing.Quadratic.Out)
-        //   .start()
-        //   .repeat(Infinity)
-      })
+      // var position = { x: 850 }
+      // var target = { x: -850 }
+      // var tween = new TWEEN.Tween(position).to(target, 20000)
+      // tween
+      //   .onUpdate(function () {
+      //     obj.position.x = position.x
+      //   })
+      //   .easing(TWEEN.Easing.Quadratic.Out)
+      //   .start()
+      //   .repeat(Infinity)
+    
     },
   },
 }

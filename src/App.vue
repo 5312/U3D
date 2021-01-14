@@ -4,8 +4,8 @@
         <router-link to="/" custom v-slot="{ navigate, isActive }">
           <span :class="[isActive?'active':'','link']" @click="navigate">首页</span>
         </router-link>
-        <router-link to="plane" custom v-slot="{  navigate, isActive }">
-          <span :class="[isActive?'active':'','link']" @click="navigate">隧道3D全景</span>
+        <router-link to="plane" custom v-slot="{   isActive }">
+          <span :class="[isActive?'active':'','link']" @click="tunnelAll">隧道3D全景</span>
         </router-link>
         <router-link to="truck" custom v-slot="{  navigate, isActive }">
          <span :class="[isActive?'active':'','link']" @click="navigate">车辆模型加载</span>
@@ -15,7 +15,7 @@
         </router-link>
     </div>
    <div class="view">
-        <router-view></router-view>
+        <router-view ></router-view>
    </div>
   </div>
 </template>
@@ -24,6 +24,14 @@
 export default {
   name: 'App',
   components: {},
+  mounted() {
+     
+  },
+  methods:{
+    tunnelAll(e){
+      console.log(e)
+    }
+  }
 }
 </script>
 <style lang="scss" scope>

@@ -9,7 +9,7 @@ app.get('/home/h', function (req, res) {
     code: 1,
     message: '隧道',
     "group": {
-      "name": '@first',
+      "name": 'homeGroup',
       "position|+1": [
         {
           x: 500,
@@ -29,7 +29,7 @@ app.get('/home/h', function (req, res) {
           "name": '@first',
           width: 100,
           height: 100,
-          deep: 20000,
+          deep: 2000000,
           "position|+1": [
             {
               x: 0,

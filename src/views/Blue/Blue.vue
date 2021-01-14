@@ -25,15 +25,12 @@ export default {
     }
   },
   mounted() {
-      let e = this;
-      let canvas = document.getElementById('canvas1')
-      e.$main(canvas,  (scene) => {
-        
-      })
+    
   },
   methods: {
     init() {
-
+    // 挂载 
+      this.$vthree.mount('.blue')
     },
   },
 }
