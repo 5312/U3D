@@ -3,7 +3,11 @@
   </div>
 </template>
 <script>
- import Tunnel from './home.js'
+import { PlaneBufferGeometry } from 'three'
+ import {
+   Tunnel,
+   Association
+        } from './home.js'
  export default {
    name: 'Home',
    components: {},
@@ -15,24 +19,32 @@
    setup(){
      return {}
    },
+   beforeCreate(){
+   },
    created() {
-     this.$api.home()
-         .then( res => {
-           this.data = res.group
-           console.log(res.group)
-           this.init();
-         }).catch( err => {
-           console.log(err)
-     })
+        this.$api.home()
+        .then( res => {
+          // ajax data
+          this.data = res.group
+          // console.log(res.group)
+          this.init();
+        }).catch( err => {
+          console.log(err)
+        })
    },
    methods: {
      init() {
+      let vthree = this.$vthree;
        // 挂载 
-      this.$vthree.mount('.blue')
-      /** @type { 创建隧道 }*/
-      let tunnel = new Tunnel(this.$vthree.scene,this.data);
-      //初始化
-      tunnel.init();
+      vthree.mount('.blue');
+      // 配置 
+      vthree.config({
+          axesHelper: false,
+          gridHelper: true,
+      }) 
+      let association = new Association(vthree.scene,this.data);
+      association.planeBuffer();
+      association.planeBuffer();
      },
    },
 
@@ -41,7 +53,6 @@
 <style lang="scss" scope>
 .blue {
   width: 100%;
-  height:100%;
-
+  height:100%;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 }
 </style>

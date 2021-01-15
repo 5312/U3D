@@ -15,6 +15,7 @@ class Tunnel {
     this.data = group.data;
     this.position = group.position
     this.rotation = group.rotation
+    // 组
     this.group = new THREE.Group();
     this.group.name = group.name;
   }
@@ -22,25 +23,24 @@ class Tunnel {
   /**
    * @description 初始化
    * @param {ajax-res}}
-   * @memberof Tunnel
    */
   init() {
     let len = this.data.length;
-    for (let i = 0; i < len; i++) {
-      const miss = this.data[i];
-      this.module(miss);
-    }
-    this.face();
+    // 两条立方体
+    // for (let i = 0; i < len; i++) {
+    //   const miss = this.data[i];
+    //   this.module(miss);
+    // }
+    // 位置
+    this.groupPosition();
+
+    // this.mountain();
     // 物体位置
     this.scene.add(this.group);
-    this.groupPosition();
+
   }
   /**
-   * @description 组--两条为一组
-   * @author YF
-   * @date 09/01/2021
-   * @param {*} data
-   * @memberof Tunnel
+   * @description 组--两条为一组两条立方体 
    */
   module(data) {
     let deep = data.deep;
@@ -72,7 +72,8 @@ class Tunnel {
     this.group.add(mesh);
 
   }
-  face() {
+  // 山体背景
+  mountain() {
     let geometry = new THREE.PlaneBufferGeometry(2000000, 2000000, 32);
 
     let material = new THREE.MeshBasicMaterial({
@@ -97,9 +98,7 @@ class Tunnel {
 
   }
   /**
-   * @description 
-   * @author YF
-   * @date 12/01/2021
+   * @description 位置
    * @memberof Tunnel
    */
   groupPosition() {
@@ -108,5 +107,83 @@ class Tunnel {
     group.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z)
     group.position.set(this.position.x, this.position.y, this.position.z)
   }
+
 }
-export default Tunnel;
+class Association extends Tunnel {
+  constructor(scene, group) {
+    super(scene, group);
+
+  }
+  planeBuffer() {
+    const width = 10000;
+    const height = 300;
+    const rlh = 200;
+    // bottom
+    var geometry = new THREE.PlaneBufferGeometry(width, height);
+    var material = new THREE.MeshBasicMaterial({
+      color: '#000',
+      side: THREE.DoubleSide
+    });
+    var bottom = new THREE.Mesh(geometry, material);
+    // left
+    var geometry1 = new THREE.PlaneBufferGeometry(width, rlh);
+    var material1 = new THREE.MeshBasicMaterial({
+      color: '#2587e8',
+      side: THREE.DoubleSide
+    });
+    var left = new THREE.Mesh(geometry1, material1);
+    left.translateY(height / 2)
+    left.translateZ(-(rlh / 2))
+    left.rotateX(Math.PI / 2);
+
+    // right
+    var geometry1 = new THREE.PlaneBufferGeometry(width, rlh);
+    var material1 = new THREE.MeshBasicMaterial({
+      color: '#2587e8',
+      side: THREE.DoubleSide
+    });
+    var right = new THREE.Mesh(geometry1, material1);
+    right.translateY(-height / 2)
+    right.translateZ(-(rlh / 2))
+    right.rotateX(Math.PI / 2);
+
+    // top shape
+
+    var geometry2 = new THREE.CylinderBufferGeometry(height / 2, height / 2, width, 8, 8, true, 0, Math.PI);
+    var material2 = new THREE.MeshBasicMaterial({
+      transparent: true,//开启透明度
+      opacity: 0.5,//设置透明度具体值
+      color: '#1bdc56',//三角面颜色
+      side: THREE.DoubleSide//两面可见
+    });//材质对象
+    var top = new THREE.Mesh(geometry2, material2);//网格模型对象
+
+    top.translateZ(-rlh)
+    top.rotateX(-Math.PI / 2)
+    top.rotateZ(Math.PI / 2)
+    // in to group
+    this.pushGroup(bottom, right, left, top)//
+
+  }
+  pushGroup(...arg) {
+    const group = new THREE.Group();
+    group.name = Math.random(20)
+    let array = [...arg];
+    // 加入组
+    for (let i = 0; i < array.length; i++) {
+      const mesh = array[i];
+      group.add(mesh);
+    }
+    // 当前组的位置
+    this.groupPosition(group)
+    this.scene.add(group)
+  }
+  groupPosition(group) {
+    group.rotateY(Math.PI / 2)
+    group.rotateX(Math.PI / 2)
+  }
+}
+export {
+  Tunnel,
+  Association
+};

@@ -1,6 +1,5 @@
 <template>
   <div class="wrap">
-    <canvas id="canvas"  width="500" height="500"></canvas>
   </div>
 </template>
 <script>
@@ -8,7 +7,7 @@ import truck from './Truck.js'
 import TWEEN from '@tweenjs/tween.js'
 
 export default {
-  name: 'Plane',
+  name: 'Truck',
   components: {},
   setup() {
     return {}
@@ -31,9 +30,11 @@ export default {
       })
   },
   methods: {
-    init() {
+    async init() {
+      let vthree = this.$vthree;
       // 挂载 
-      this.$vthree.mount('.blue')
+      vthree.mount('.wrap')
+      truck(vthree.scene)
       const obj = await truck(this.$vthree.scene).catch((err) => {
           console.log(err)
         })

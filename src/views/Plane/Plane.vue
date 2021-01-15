@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <canvas id="canvas"  width="500" height="500"></canvas>
+   
   </div>
 </template>
 <script>
@@ -33,9 +33,11 @@ export default {
   },
   methods: {
     init() {
-        // 挂载 
-      this.$vthree.mount('.blue')
-      planeBlack(e.data, this.$vthree.scene) //管道
+      let e = this;
+      let app = this.$vthree;
+      // 挂载 
+      app.mount('.wrap')
+      planeBlack(e.data, e.$vthree.scene) //管道
 
     },
   },

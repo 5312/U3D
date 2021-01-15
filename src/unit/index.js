@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import TWEEN from '@tweenjs/tween.js';
+import { Geometry } from 'three';
 /**
  * @description 基类
  * @author YF
@@ -28,13 +29,25 @@ class Vthree {
         });
         // 创建视图控制器OrbitControls，鼠标控制
         this.controls = new OrbitControls(this.camera, this.element);
+
+        // 配置
+        this.data = {
+            axesHelper: {
+                visible: false,
+            },
+            gridHelper: {
+                visible: false
+            }
+        }
+        // 坐标格辅助
+        this.helper();
     }
     /**
- * @description 创建时进行一些初始化
- */
+    * @description 创建时进行一些初始化
+    */
     createInit() {
         // 相机设置
-        this.camera.position.set(0, 0, 900);
+        this.camera.position.set(0, 500, 9000);
         // 设置默认背景色
         this.renderer.setClearColor('#244780', 1);
         this.renderer.outputEncoding = THREE.sRGBEncoding;
@@ -45,9 +58,13 @@ class Vthree {
 
         // 适应浏览器大小
         window.addEventListener("resize", this.onResize.bind(this));
-
-        this.star();
+        /**增加元素操作应放在这里 */
+        // 渲染
         this.render();
+        // 星星
+        this.star();
+        // 增加辅助元素
+        this.setHelper();
     }
     /** @description 创建画布  */
     before() {
@@ -69,16 +86,17 @@ class Vthree {
     //星空
     star() {
         // フォグを作成
-        this.scene.fog = new THREE.Fog(0xaaaaaa, 1, 30000);
+        this.scene.fog = new THREE.Fog(0xaaaaaa, 1, 3000000);
         // 形状データを作成
         const geometry = new THREE.Geometry();
         for (let i = 0; i < 10000; i++) {
             const star = new THREE.Vector3();
-            star.x = THREE.Math.randFloatSpread(2000);
-            star.y = THREE.Math.randFloatSpread(2000);
-            star.z = THREE.Math.randFloatSpread(2000);
+            star.x = THREE.Math.randFloatSpread(20000);
+            star.y = THREE.Math.randFloatSpread(20000);
+            star.z = THREE.Math.randFloatSpread(20000);
 
             geometry.vertices.push(star)
+
         }
         // マテリアルを作成
         const material = new THREE.PointsMaterial({
@@ -113,13 +131,67 @@ class Vthree {
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
     }
-    add() {
+    // 配置
+    config(options) {
+        this.data.axesHelper.visible = options.axesHelper ? options.axesHelper : false;
+        this.data.gridHelper.visible = options.gridHelper ? options.gridHelper : false;
+    }
+    // 清空场景
+    clear() {
+        while (this.scene.children.length > 0) {
+            const mesh = this.scene.children[0];
+            if (mesh.type == 'Group') {
+                mesh.traverse(function (obj) {
+                    if (obj.type === 'Mesh') {
+                        obj.geometry.dispose();
+                        obj.material.dispose();
+                        if (obj.texture) obj.texture.dispose();
+                    }
+                })
+            } else {
+                mesh.geometry.dispose();
+                mesh.material.dispose();
+                if (mesh.texture) mesh.texture.dispose();
+            }
+            this.scene.remove(this.scene.children[0]);
+        }
+    }
+    // 辅助元素
+    helper() {
+        // 复制坐标系
+        var axesHelper = new THREE.AxesHelper(5000);
+        this.data.axesHelper = axesHelper;
 
+        // 辅助网格
+        var size = 1000000;
+        var divisions = 1000;
+        var gridHelper = new THREE.GridHelper(size, divisions);
+        gridHelper.position.set(0, -10000, 0)
+        this.data.gridHelper = gridHelper;
+    }
+    // 增加辅助元素 shouled be add once 
+    setHelper() {
+        const config = this.data;
+        for (const object3d in config) {
+            if (Object.hasOwnProperty.call(config, object3d)) {
+                const element = config[object3d];
+                if (element.visible) this.scene.add(element);
+            }
+        }
     }
 }
 export default {
     install: (app, options) => {
+        const vthree = new Vthree();
+        app.config.globalProperties.$vthree = vthree
+        // 混入生命周期
+        app.mixin({
+            // clear before Create 
+            beforeCreate() {
+                // clear THREE.scene
+                vthree.clear();
+            },
 
-        app.config.globalProperties.$vthree = new Vthree;
+        })
     }
 }
