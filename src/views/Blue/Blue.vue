@@ -1,36 +1,42 @@
 <template>
   <div class="blue">
-    <canvas id="canvas1"></canvas>
+    
   </div>
 </template>
 <script>
+import {
+  Tunnel
+} from '../Home/home.js';
 export default {
   name: 'Blue',
   components: {},
-  setup() {
-     
-    return {
-
-    }
-  },
+  setup() {},
   data() {
     return {
       data: '',
     }
   },
-  setup(){
-    
-    return {
-
-    }
-  },
   mounted() {
-    
+    this.$api.home().then(res => {
+      // ajax data
+      this.data = res.group;
+      this.init();
+    }).catch(err => {
+      console.log(err)
+    })
   },
   methods: {
     init() {
-    // 挂载 
-      this.$vthree.mount('.blue')
+       let vthree = this.$vthree;
+      // 挂载 
+      vthree.mount('.blue');
+      // 配置 
+      vthree.config({
+        axesHelper: true,
+        gridHelper: true,
+      });
+      let tunnel = new Tunnel(vthree.scene,this.data);
+      tunnel.init();
     },
   },
 }
@@ -39,9 +45,5 @@ export default {
 .blue {
   width: 100%;
   height:100%;
-  #canvas1 {
-    width: 100%;
-    height: 100%;
-  }
 }
 </style>

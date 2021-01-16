@@ -5,7 +5,7 @@
 </template>
 <script>
 import curve from '../../module/curve'
-import planeBlack from '../../module/planeBlack.js'
+import planeBlack from './plane.js'
 import TWEEN from '@tweenjs/tween.js'
 
 export default {
@@ -33,12 +33,11 @@ export default {
   },
   methods: {
     init() {
-      let e = this;
       let app = this.$vthree;
       // 挂载 
       app.mount('.wrap')
-      planeBlack(e.data, e.$vthree.scene) //管道
-
+      planeBlack(this.data, app.scene) //管道
+      curve(app.scene)
     },
   },
 }

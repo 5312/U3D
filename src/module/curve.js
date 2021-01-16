@@ -15,6 +15,7 @@ class Curve {
     var points = arc.getPoints(50);//分段数50，返回51个顶点
     // setFromPoints方法从points中提取数据改变几何体的顶点属性vertices
     geometry.setFromPoints(points);
+    // 画园，返回园的顶点，加入geometry ,然后画线
     //材质对象
     var material = new THREE.LineBasicMaterial({
       opacity: 0.5, //设置透明度

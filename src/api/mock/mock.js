@@ -4,6 +4,70 @@ let cors = require('cors');
 let app = express();        //实例化express
 app.use(cors())
 
+app.get('/home/tunnel', function (req, res) {
+  res.json(Mock.mock({
+    code: 1,
+    message: '隧道',
+    "group": {
+      "data|2": [
+        {
+          "name": '@first',
+          width: 12000,
+          height: 300,
+          rlh: 200,
+          "position|+1": [
+            {
+              x: -1000,
+              y: 0,
+              z: 0
+            }, {
+              x: 1000,
+              y: 0,
+              z: 0
+            }
+          ],
+          "rotation|+1": [
+            {
+              rx: Math.PI / 2,
+              ry: -Math.PI / 2.2,
+              rz: 0
+            }, {
+              rx: Math.PI / 2,
+              ry: Math.PI / 2.2,
+              rz: 0
+            }
+          ]
+        }
+      ],
+      "corner": {
+        "data|+1": [
+          {
+            "name": 'corner',
+            width: 1,
+            height: 300,// 半径 -- 隧道的宽
+            segments: 20,
+            thetaStart: 0,
+            thetaLength: Math.PI //Math.PI / 1.05,
+          }
+        ],
+        "position|+1": [
+          {
+            x: 0,
+            y: 0,
+            z: 5900
+          }
+        ],
+        "rotation|+1": [
+          {
+            rx: 0,
+            ry: 0,
+            rz: 0
+          }
+        ]
+      }
+    }
+  }))
+})
 app.get('/home/h', function (req, res) {
   res.json(Mock.mock({
     code: 1,
