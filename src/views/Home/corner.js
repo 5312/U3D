@@ -75,7 +75,7 @@ class Corner extends Tunnel {
     inslider.rotateY(Math.PI / 2)
     // in-slider 
     // 圆环
-    var geometry3 = new TorusBufferGeometry((radius - height / 2), height / 2, segments, segments, thetaLength);//圆环的圆心角
+    var geometry3 = new TorusBufferGeometry((radius - height / 2), height / 2, 6, segments, thetaLength);//圆环的圆心角
     var material3 = new MeshBasicMaterial({
       transparent: true,//开启透明度
       opacity: 0.5,//设置透明度具体值

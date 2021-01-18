@@ -5,6 +5,7 @@ const { MathUtils } = require('three');
 let app = express();        //实例化express
 app.use(cors())
 
+const ange = [[-1000, 0, -6000], [-1000, 0, 6000]]
 app.get('/home/tunnel', function (req, res) {
   res.json(Mock.mock({
     code: 1,
@@ -47,7 +48,7 @@ app.get('/home/tunnel', function (req, res) {
             "radius|+1": [1150, 1150],
             rlh: 200,
             height: 300,// 半径 -- 隧道的宽
-            segments: 60,
+            segments: 3,
             thetaStart: 0,
             "thetaLength|+1": [
               Math.PI, Math.PI

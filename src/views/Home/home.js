@@ -198,7 +198,7 @@ class Association extends Tunnel {
     right.rotateX(Math.PI / 2);
 
     // top shape
-    var geometry2 = new CylinderBufferGeometry(height / 2, height / 2, width, 40, 40, true, 0, Math.PI);
+    var geometry2 = new CylinderBufferGeometry(height / 2, height / 2, width, 3, 3, true, 0, Math.PI);
     var material2 = new MeshBasicMaterial({
       transparent: true,//开启透明度
       opacity: 0.5,//设置透明度具体值

@@ -44,7 +44,7 @@ export default {
       // 配置 
       vthree.config({
         axesHelper: true,
-        gridHelper: false,
+        gridHelper: true,
         ambientLight: true,
       });
       // 隧道
@@ -76,35 +76,57 @@ export default {
           res.position.x = positionA.x
           res.position.y = positionA.y
           res.position.z = positionA.z
-        }).easing(TWEEN.Easing.Quadratic.Out)
+        }).easing(TWEEN.Easing.Linear.None)
         // 拐弯
         // 起点坐标
-        var positionB = { x:x, y: y, z: -z, r: Math.PI * 2 }
+        var positionB = { x:-1000, y: y, z: 6000, r:0}
         // 结束点坐标
-        var targetB = { x:-x, y: y, z: -z, r: Math.PI * 1.05 }
+        var targetB = { x:-550, y: y, z:6800, r:-Math.PI/2}
         let tweenB = new TWEEN.Tween(positionB).to(targetB, 200).onUpdate(function() {
           res.position.x = positionB.x
           res.position.y = positionB.y
           res.position.z = positionB.z
-          // res.rotation.y = positionB.r
-        }).easing(TWEEN.Easing.Quadratic.Out)
+          res.rotation.y = positionB.r
+        }).easing(TWEEN.Easing.Linear.None)
 
         // 右段
         // 起点坐标
-        var positionC = { x: -x, y: y, z: -z }
+        var positionC =  { x:-550, y: y, z:6800, r:-Math.PI/2}
         // 结束点坐标
-        var targetC = { x: -x, y: y, z: z }
-        let tweenC = new TWEEN.Tween(positionC).to(targetC, 2000).onUpdate(function() {
+        var targetC = { x:550, y: y, z:6800, r:-Math.PI/2}
+        let tweenC = new TWEEN.Tween(positionC).to(targetC, 200).onUpdate(function() {
           res.position.x = positionC.x
           res.position.y = positionC.y
           res.position.z = positionC.z
         }).easing(TWEEN.Easing.Quadratic.Out)
 
+        // 右段
+        // 起点坐标
+        var positionD = { x:550, y: y, z:6800, r:-Math.PI/2}
+        // 结束点坐标
+        var targetD =  { x:1000, y: y, z: 6000, r:-Math.PI}
+        let tweenD= new TWEEN.Tween(positionD).to(targetD, 2000).onUpdate(function() {
+          res.position.x = positionD.x
+          res.position.y = positionD.y
+          res.position.z = positionD.z
+           res.rotation.y = positionD.r
+        }).easing(TWEEN.Easing.Quadratic.Out)
+
+        // 起点坐标
+        var positionE = { x:1000, y: y, z: 6000, r:-Math.PI}
+        // 结束点坐标
+        var targetE =  { x:1000, y: y, z: -6000, r:-Math.PI}
+        let tweenE= new TWEEN.Tween(positionE).to(targetE, 2000).onUpdate(function() {
+          res.position.x = positionE.x
+          res.position.y = positionE.y
+          res.position.z = positionE.z
+        }).easing(TWEEN.Easing.Quadratic.Out)
+
 
         tweenA.start(2000).chain(tweenB)
         tweenB.chain(tweenC)
-
-
+        tweenC.chain(tweenD)  
+        tweenD.chain(tweenE)
       })
 
 
