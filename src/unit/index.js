@@ -49,7 +49,7 @@ class Vthree {
     */
     createInit() {
         // 相机设置
-        this.camera.position.set(0, 500, 9000);
+        this.camera.position.set(0, 10000, 9000);
         // 设置默认背景色
         this.renderer.setClearColor('#244780', 1);
         this.renderer.outputEncoding = THREE.sRGBEncoding;
@@ -58,7 +58,7 @@ class Vthree {
         //右键拖拽
         this.controls.enablePan = true;
         /**---------------------------------------------------------------------------- */
-        window.addEventListener('click', this.onMouseClick.bind(this), false);
+        window.addEventListener('click', this.onMouseClick.bind(this), { passive: true });
         // 适应浏览器大小
         window.addEventListener("resize", this.onResize.bind(this), { passive: true });
         /**增加元素操作应放在这里 */
@@ -123,6 +123,7 @@ class Vthree {
         TWEEN.update();
         this.renderer.render(this.scene, this.camera);
     }
+    // 选中
     onMouseClick(event) {
         var mouse = new THREE.Vector2();
         let scene = this.scene;
@@ -179,15 +180,16 @@ class Vthree {
             if (mesh.type == 'Group') {
                 mesh.traverse(function (obj) {
                     if (obj.type === 'Mesh') {
-                        obj.geometry.dispose();
-                        obj.material.dispose();
+                        if (obj.geometry) obj.geometry.dispose();
+                        if (obj.material) obj.material.dispose();
                         if (obj.texture) obj.texture.dispose();
                     }
                 })
             } else {
-                mesh.geometry.dispose();
-                mesh.material.dispose();
+                if (mesh.geometry) mesh.geometry.dispose();
+                if (mesh.material) mesh.material.dispose();
                 if (mesh.texture) mesh.texture.dispose();
+
             }
             this.scene.remove(this.scene.children[0]);
         }

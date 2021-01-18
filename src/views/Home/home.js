@@ -117,9 +117,8 @@ class Tunnel {
     }
     this.scene.add(group)
   }
-  // 本组整体位置
+  // 以组为单位 本组整体位置
   setPosition() {
-    console.log(this)
     const {
       x, y, z
     } = this.position
@@ -141,8 +140,8 @@ class Tunnel {
   groupPosition() {
     let group = this.scene.getObjectByName(this.group.name);
     if (!group) group = this.group
-    group.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z)
     group.position.set(this.position.x, this.position.y, this.position.z)
+    group.rotation.set(this.rotation.x, this.rotation.y, this.rotation.z)
   }
 
 }
@@ -199,7 +198,7 @@ class Association extends Tunnel {
     right.rotateX(Math.PI / 2);
 
     // top shape
-    var geometry2 = new CylinderBufferGeometry(height / 2, height / 2, width, 8, 8, true, 0, Math.PI);
+    var geometry2 = new CylinderBufferGeometry(height / 2, height / 2, width, 40, 40, true, 0, Math.PI);
     var material2 = new MeshBasicMaterial({
       transparent: true,//开启透明度
       opacity: 0.5,//设置透明度具体值

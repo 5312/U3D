@@ -1,6 +1,7 @@
 let express = require('express');   //引入express
 let Mock = require('mockjs');       //引入mock
 let cors = require('cors');
+const { MathUtils } = require('three');
 let app = express();        //实例化express
 app.use(cors())
 
@@ -29,41 +30,55 @@ app.get('/home/tunnel', function (req, res) {
           "rotation|+1": [
             {
               rx: Math.PI / 2,
-              ry: -Math.PI / 2.2,
+              ry: -Math.PI / 2,
               rz: 0
             }, {
               rx: Math.PI / 2,
-              ry: Math.PI / 2.2,
+              ry: Math.PI / 2,
               rz: 0
             }
           ]
         }
       ],
       "corner": {
-        "data|+1": [
+        "data|2": [
           {
             "name": 'corner',
-            width: 1,
+            "radius|+1": [1150, 1150],
+            rlh: 200,
             height: 300,// 半径 -- 隧道的宽
-            segments: 20,
+            segments: 60,
             thetaStart: 0,
-            thetaLength: Math.PI //Math.PI / 1.05,
+            "thetaLength|+1": [
+              Math.PI, Math.PI
+            ],
+            "position|+1": [
+              {
+                x: 0,
+                y: 0,
+                z: 6000
+              },
+              {
+                x: 0,
+                y: 0,
+                z: -6000
+              }
+            ],
+            "rotation|+1": [
+              {
+                rx: 0,
+                ry: 0,
+                rz: 0
+              },
+              {
+                rx: 0,
+                ry: Math.PI,
+                rz: 0
+              }
+            ]
           }
         ],
-        "position|+1": [
-          {
-            x: 0,
-            y: 0,
-            z: 5900
-          }
-        ],
-        "rotation|+1": [
-          {
-            rx: 0,
-            ry: 0,
-            rz: 0
-          }
-        ]
+
       }
     }
   }))

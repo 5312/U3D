@@ -1,10 +1,10 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 const PATH = './src/assets/';
-
+// 
 const dele = (scene, node, name) => {
-  for (let i = 0; i < node.length; i++) {
-    const element = node[i];
+  for (let j = 0; j < node.length; j++) {
+    const element = node[j];
     // 父元素对象
     const parentNode = scene.getObjectByName(element);
 
@@ -19,8 +19,6 @@ const dele = (scene, node, name) => {
       parentNode.remove(obj);
     }
   }
-
-
 }
 
 function truck(scene) {
@@ -40,7 +38,7 @@ function truck(scene) {
       function (gltf) {
         // 设置模型缩放比例
         const Aston = gltf.scene.getObjectByName("Aston_Martin_Vantage")
-        Aston.scale.set(0.5, 0.5, 0.5)
+        Aston.scale.set(0.2, 0.2, 0.2)
         // 父元素
         const parent = ["Tires", "Disc_Brake"]
         const name = ["ID103", 'gum94001', 'gum34001', 'gum34002', 'silver2002', 'silver2001', 'gum94002', 'silver04001', 'gum95002', 'gum35002', 'gum35001', 'gum95001', 'silver3002', 'silver3001', "silver04002", 'gum170002', 'gum170001', 'chrome03001', 'chrome03002']
@@ -79,7 +77,6 @@ function truck(scene) {
       function (error) {
         console.log(error)
         console.log('An error happened');
-
       }
     );
   })
