@@ -202,7 +202,7 @@ class Association extends Tunnel {
     var material2 = new MeshBasicMaterial({
       transparent: true,//开启透明度
       opacity: 0.5,//设置透明度具体值
-      color: '#1bdc56',//三角面颜色
+      color: '#74CAE7',//三角面颜色
       side: DoubleSide//两面可见
     });//材质对象
     var top = new Mesh(geometry2, material2);//网格模型对象
@@ -218,7 +218,29 @@ class Association extends Tunnel {
   }
 
 }
+
+/**
+ * @description 指示牌 
+ * @author YF
+ * @date 19/01/2021
+ * @class Camera
+ * @extends {Tunnel}
+ */
+class Camera extends Tunnel {
+  constructor(scene, group) {
+    super(scene, group)
+  }
+  // 保存 相机信息
+  saveCamera() {
+
+  }
+  // 位置信息
+  position() {
+
+  }
+}
 export {
   Tunnel,
-  Association
+  Association,
+  Camera
 };

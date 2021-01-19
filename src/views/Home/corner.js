@@ -79,7 +79,7 @@ class Corner extends Tunnel {
     var material3 = new MeshBasicMaterial({
       transparent: true,//开启透明度
       opacity: 0.5,//设置透明度具体值
-      color: '#1bdc56',//三角面颜色
+      color: '#74CAE7',//三角面颜色
       side: FrontSide,//两面可见
     });
     var top = new Mesh(geometry3, material3);

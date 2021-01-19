@@ -32,7 +32,7 @@ class Curve {
   setTrans(x, y, z) {
     let trans = new Vector3(x, y, z);
     let group = this.scene.getObjectByName('line');
-    console.log(group)
+
     group.translateOnAxis(trans, 100);
 
   }

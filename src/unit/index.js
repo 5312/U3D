@@ -41,7 +41,7 @@ class Vthree {
                 visible: false
             }
         }
-        // 坐标格辅助
+        // 辅助元素
         this.helper();
     }
     /**
@@ -112,7 +112,7 @@ class Vthree {
             // map: createLightMateria()//刚刚创建的粒子贴图就在这里用上
         });
         const starField = new THREE.Points(geometry, material);
-        // this.scene.add(starField);
+        this.scene.add(starField);
     }
     // 渲染函数
     render() {
@@ -129,14 +129,9 @@ class Vthree {
         let scene = this.scene;
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-
         var raycaster = new THREE.Raycaster();
 
-
         raycaster.setFromCamera(mouse, this.camera);
-
-
         // 计算物体和射线的焦点
         var intersects = raycaster.intersectObjects(scene.children, true);
         if (intersects.length > 0) {
@@ -211,7 +206,7 @@ class Vthree {
         var ambientLight = new THREE.AmbientLight('#fff');
         this.data.ambientLight = ambientLight
     }
-    // 增加辅助元素 shouled be add once 
+    // 辅助元素显示控制 shouled be add once 
     setHelper() {
         const config = this.data;
         for (const object3d in config) {
