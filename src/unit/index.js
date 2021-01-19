@@ -26,6 +26,8 @@ class Vthree {
             canvas: this.element,
             preserveDrawingBuffer: true,
         });
+        // 选中物体
+        this.selectObject = null;
         // 创建视图控制器OrbitControls，鼠标控制
         this.controls = new OrbitControls(this.camera, this.element);
 
@@ -49,7 +51,7 @@ class Vthree {
     */
     createInit() {
         // 相机设置
-        this.camera.position.set(0, 10000, 9000);
+        this.camera.position.set(0, 5000, 10000);
         // 设置默认背景色
         this.renderer.setClearColor('#244780', 1);
         this.renderer.outputEncoding = THREE.sRGBEncoding;
@@ -112,7 +114,7 @@ class Vthree {
             // map: createLightMateria()//刚刚创建的粒子贴图就在这里用上
         });
         const starField = new THREE.Points(geometry, material);
-        this.scene.add(starField);
+        // this.scene.add(starField);
     }
     // 渲染函数
     render() {
@@ -130,25 +132,15 @@ class Vthree {
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
         var raycaster = new THREE.Raycaster();
-
+        // console.log(mouse.x, mouse.y)
         raycaster.setFromCamera(mouse, this.camera);
         // 计算物体和射线的焦点
         var intersects = raycaster.intersectObjects(scene.children, true);
         if (intersects.length > 0) {
-            // for (var i = 0; i < intersects.length; i++) {
-            var sceneChildren = scene.children
-            // for (var i = 0; i < sceneChildren.length; i++) {
-            //     sceneChildren[i].material.color.set(0x0000ff)
-            // }
+            // 选中物体
+            this.selectObject = intersects[0].object;
+            console.log(this.selectObject)
             // intersects[0].object.material.color.set(0xff0000)
-            // // }
-            // intersects[0].object.material.color.set(0xff0000);
-            console.log(intersects[0].object.name, intersects[0].object.parent.name)
-        } else {
-            var intersects = scene.children
-            for (var i = 0; i < intersects.length; i++) {
-                // intersects[i].material.color.set(0x0000ff)
-            }
         }
     }
     // 适应函数
@@ -222,10 +214,19 @@ export default {
         const vthree = new Vthree();
         app.config.globalProperties.$vthree = vthree
         app.config.globalProperties.$tween = TWEEN;
+
+        app.directive('my-directive', {
+            bind(el, binding, vnode, oldVnode) {
+                // some logic ...
+            }
+
+        })
+
         // 混入生命周期
         app.mixin({
             // clear before Create 
             beforeCreate() {
+
                 // clear THREE.scene
                 vthree.clear();
             },

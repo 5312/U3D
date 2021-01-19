@@ -2,7 +2,9 @@
 import {
   Mesh,
   TorusBufferGeometry,
-  CircleBufferGeometry,
+  LineBasicMaterial,
+  EdgesGeometry,
+  LineSegments,
   RingBufferGeometry,
   MeshBasicMaterial,
   DoubleSide,
@@ -57,7 +59,7 @@ class Corner extends Tunnel {
     // out-slider /圆柱的顶部半径 /圆柱的底部半径 /圆柱的高度 / 圆柱侧面周围的分段数/ 圆柱侧面沿着其高度的分段数/闭合/起始角度/ 圆柱底面圆扇区的中心角
     var geometry2 = new CylinderBufferGeometry(radius, radius, rlh, segments, segments, true, thetaStart, thetaLength);
     var material2 = new MeshBasicMaterial({
-      color: '#2587e8',//三角面颜色
+      color: '#0546BE',//三角面颜色
       side: DoubleSide//两面可见
     });//材质对象
     var slider = new Mesh(geometry2, material2);//网格模型对象
@@ -66,7 +68,7 @@ class Corner extends Tunnel {
     slider.rotateY(Math.PI / 2)
     var geometry3 = new CylinderBufferGeometry(radius - 300, radius - 300, rlh, segments, segments, true, thetaStart, thetaLength);
     var material3 = new MeshBasicMaterial({
-      color: '#2587e8',//三角面颜色
+      color: '#0546BE',//三角面颜色
       side: DoubleSide//两面可见
     });//材质对象
     var inslider = new Mesh(geometry3, material3);//网格模型对象
@@ -79,12 +81,21 @@ class Corner extends Tunnel {
     var material3 = new MeshBasicMaterial({
       transparent: true,//开启透明度
       opacity: 0.5,//设置透明度具体值
-      color: '#74CAE7',//三角面颜色
+      color: '#0546BE',//三角面颜色
       side: FrontSide,//两面可见
     });
     var top = new Mesh(geometry3, material3);
     top.translateY(height - 100)
     top.rotateX(Math.PI / 2)
+
+    /** @type {边框} */
+    let edges = new EdgesGeometry(geometry3, 2);
+
+    /** @type {边框材质} */
+    let edgesLine = new LineBasicMaterial({ color: '#00C0FF' });//'#244780'
+    // edgesLine.depthTest = true;//深度测试，开启则边框透明
+    let meshLine = new LineSegments(edges, edgesLine);
+    top.add(meshLine)
 
     // put into group
     this.pushGroup(bottom, slider, inslider, top);

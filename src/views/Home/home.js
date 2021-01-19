@@ -178,7 +178,7 @@ class Association extends Tunnel {
     // left
     var geometry1 = new PlaneBufferGeometry(width, rlh);
     var material1 = new MeshBasicMaterial({
-      color: '#2587e8',
+      color: '#0546BE',
       side: DoubleSide
     });
     var left = new Mesh(geometry1, material1);
@@ -189,7 +189,7 @@ class Association extends Tunnel {
     // right
     var geometry1 = new PlaneBufferGeometry(width, rlh);
     var material1 = new MeshBasicMaterial({
-      color: '#2587e8',
+      color: '#0546BE',
       side: DoubleSide
     });
     var right = new Mesh(geometry1, material1);
@@ -202,14 +202,26 @@ class Association extends Tunnel {
     var material2 = new MeshBasicMaterial({
       transparent: true,//开启透明度
       opacity: 0.5,//设置透明度具体值
-      color: '#74CAE7',//三角面颜色
+      color: '#0546BE',//三角面颜色
       side: DoubleSide//两面可见
     });//材质对象
     var top = new Mesh(geometry2, material2);//网格模型对象
 
+    /** @type {边框} */
+    let edges = new EdgesGeometry(geometry2, 2);
+
+    /** @type {边框材质} */
+    let edgesLine = new LineBasicMaterial({ color: '#00C0FF' });//'#244780'
+    // edgesLine.depthTest = true;//深度测试，开启则边框透明
+    let meshLine = new LineSegments(edges, edgesLine);
+
+
+
     top.translateZ(-rlh)
     top.rotateX(-Math.PI / 2)
     top.rotateZ(Math.PI / 2)
+
+    top.add(meshLine);
     // put into group
     this.pushGroup(bottom, right, left, top)//
     this.group.name = name;

@@ -3,8 +3,8 @@
   </div>
 </template>
 <script>
-import truck from './Truck.js'
-import TWEEN from '@tweenjs/tween.js'
+import load from '../../unit/glbload.js'
+
 
 export default {
   name: 'Truck',
@@ -34,9 +34,12 @@ export default {
       let vthree = this.$vthree;
       // 挂载 
       vthree.mount('.wrap')
-      truck(vthree.scene)
-      const obj = await truck(this.$vthree.scene).catch((err) => {
-          console.log(err)
+      load({url:'Glb/laoya/laoya.glb', light : false, dele : false }).then(res =>{
+        vthree.scene.add(res.scene)
+        res.scene.position.set(0, 0, 0)
+        res.scene.scale.set(100, 100, 100)
+        // res.scene.rotateY(Math.PI /2)
+        console.log(res)
       })
     
     },
@@ -47,9 +50,6 @@ export default {
 .wrap {
   width: 100%;
   height: 100%;
-  #canvas {
-    width: 100%;
-    height: 100%;
-  }
+
 }
 </style>
