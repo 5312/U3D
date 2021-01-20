@@ -1,13 +1,13 @@
 <template>
-  <div class="home">
-  </div>
-  <div class='float'>{{select}}</div>
+  <div class="home" ></div>
+  <div class="float">{{ select }}</div>
 </template>
 <script>
 // 隧道
 import {
   Tunnel,
-  Association
+  Association,
+  Indicator
 } from './home.js';
 // 拐角
 import Corner from './corner.js';
@@ -21,11 +21,12 @@ export default {
     return {
       data: '',
       corner: '',
-      select:'hello'
+      select: 'hello'
     }
   },
   created() {
-
+    // 
+    this.click();
     this.$api.tunnel().then(res => {
       // ajax data
       this.data = res.group;
@@ -34,15 +35,38 @@ export default {
       // 创建隧道
       this.init();
       // 相机位置
-      this.camera();
+      this.indicator();
+
     }).catch(err => {
       console.log(err)
     })
   },
+  vtClick(e) {
+    console.log(e)
+  },
   methods: {
-    camera() {
+    click() {
+      let that = this
+      this.$vthree.onClick = function(select) {
+        if (select) {
+          let info = select.geometry.parameters
+          that.select = select.name;
+          if (select.camera) {
+            let camera = select.camera
+            that.$vthree.camera.position.set(camera.x, camera.y, camera.z)
+          }
+        }
+      }
+    },
+    indicator() {
+      let vthree = this.$vthree;
       const vector = [1000, 70, 0];
+      let data = {
 
+      }
+      // 创建一个物体--保存相机位置信息
+      let ind = new Indicator(vthree.scene, data);
+      ind.init()
     },
     init() { // 隧道-汽车-动画
 
@@ -53,7 +77,7 @@ export default {
       // 配置 
       vthree.config({
         axesHelper: true,
-        gridHelper: false,
+        gridHelper: true,
         ambientLight: true,
       });
       // 隧道
@@ -217,13 +241,13 @@ export default {
   width: 100%;
   height: 100%;
 }
-.float{
-  position:absolute;
-  width:100px;
-  height:100px;
-  top:50px;
-  right:0;
-  overflow:hidden;
-  color:#fff;
+.float {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: 50px;
+  right: 0;
+  overflow: hidden;
+  color: #fff;
 }
 </style>

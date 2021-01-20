@@ -9,7 +9,9 @@ import {
   MeshBasicMaterial,
   DoubleSide,
   CylinderBufferGeometry,
-  Group
+  Group,
+  Vector2,
+  Vector3
 } from 'three';
 /**
  * @description v隧道构建类
@@ -175,6 +177,7 @@ class Association extends Tunnel {
       side: DoubleSide
     });
     var bottom = new Mesh(geometry, material);
+    bottom.name = 'bottom'
     // left
     var geometry1 = new PlaneBufferGeometry(width, rlh);
     var material1 = new MeshBasicMaterial({
@@ -182,6 +185,7 @@ class Association extends Tunnel {
       side: DoubleSide
     });
     var left = new Mesh(geometry1, material1);
+    left.name = 'left'
     left.translateY(height / 2)
     left.translateZ(-(rlh / 2))
     left.rotateX(Math.PI / 2);
@@ -193,6 +197,7 @@ class Association extends Tunnel {
       side: DoubleSide
     });
     var right = new Mesh(geometry1, material1);
+    right.name = 'right'
     right.translateY(-height / 2)
     right.translateZ(-(rlh / 2))
     right.rotateX(Math.PI / 2);
@@ -206,16 +211,18 @@ class Association extends Tunnel {
       side: DoubleSide//两面可见
     });//材质对象
     var top = new Mesh(geometry2, material2);//网格模型对象
-
+    top.name = 'top'
     /** @type {边框} */
-    let edges = new EdgesGeometry(geometry2, 2);
+    let edges = new EdgesGeometry(geometry2, 1);
 
     /** @type {边框材质} */
-    let edgesLine = new LineBasicMaterial({ color: '#00C0FF' });//'#244780'
-    // edgesLine.depthTest = true;//深度测试，开启则边框透明
+    let edgesLine = new LineBasicMaterial({
+      color: '#00C0FF',
+      emissive: '#00C0FF'
+    });//'#244780'
+    edgesLine.depthTest = true;//深度测试，开启则边框透明
     let meshLine = new LineSegments(edges, edgesLine);
-
-
+    meshLine.name = 'meshLine'
 
     top.translateZ(-rlh)
     top.rotateX(-Math.PI / 2)
@@ -230,17 +237,39 @@ class Association extends Tunnel {
   }
 
 }
-
 /**
  * @description 指示牌 
  * @author YF
  * @date 19/01/2021
- * @class Camera
+ * @class Indicator
  * @extends {Tunnel}
  */
-class Camera extends Tunnel {
+class Indicator extends Tunnel {
   constructor(scene, group) {
     super(scene, group)
+  }
+  init() {
+    this.Indicator();
+  }
+  Indicator() {
+    let gemotry = new PlaneBufferGeometry(300, 300);
+    let material = new MeshBasicMaterial({
+      color: '#2E70DC',
+      side: DoubleSide,
+    });
+    let mesh = new Mesh(gemotry, material);
+    mesh.name = 'Indicator'
+    mesh.camera = {
+      x: 2000,
+      y: 2000,
+      z: 2000
+    }
+    this.pushGroup(mesh)
+    this.group.name = 'ind';
+
+
+    let axis = new Vector3(1000, 1000, 0)
+    this.group.translateOnAxis(axis, 1)
   }
   // 保存 相机信息
   saveCamera() {
@@ -254,5 +283,5 @@ class Camera extends Tunnel {
 export {
   Tunnel,
   Association,
-  Camera
+  Indicator
 };
