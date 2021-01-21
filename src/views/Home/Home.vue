@@ -69,16 +69,15 @@ export default {
       ind.init()
     },
     init() { // 隧道-汽车-动画
-
       let vthree = this.$vthree;
+
       let e = this
       // 挂载 
       vthree.mount('.home');
-      // 配置 
+        // 配置 
       vthree.config({
         axesHelper: true,
         gridHelper: true,
-        ambientLight: true,
       });
       // 隧道
       let array = this.data.data;

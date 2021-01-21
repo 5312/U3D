@@ -5,7 +5,7 @@
 </template>
 <script>
 import curve from '../../module/curve'
-import planeBlack from './plane.js'
+import {  Line } from './plane.js'
 import TWEEN from '@tweenjs/tween.js'
 
 export default {
@@ -36,8 +36,14 @@ export default {
       let app = this.$vthree;
       // 挂载 
       app.mount('.wrap')
-      planeBlack(this.data, app.scene) //管道
-      curve(app.scene)
+      app.config({
+        axesHelper: false,
+        gridHelper: false,
+      })
+      app.camera.position.set(0,0,1000)
+      let line = new Line(app.scene)
+      line.create();
+      // curve(app.scene)
     },
   },
 }

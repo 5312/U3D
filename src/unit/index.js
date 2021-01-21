@@ -2,31 +2,30 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
 
 import TWEEN from '@tweenjs/tween.js';
-
 /**
  * @description 基类
  * @author YF
  * @date 14/01/2021
- * @class Vthree
+ * @class Vthree 
  */
 class Vthree {
-    constructor() {
+    constructor() { // 创建
         this.element = null;
         this.wrap = null //this.element.parentNode;
-
-        this.before();
-        // 创建相机Camera
-        // 场景
-        this.scene = new THREE.Scene();
-        // 相机
+        // 创建虚拟dom
+        this.createsNode();
+        // 参数
         let width = this.wrap ? this.wrap.clientWidth : window.innerWidth;
         let height = this.wrap ? this.wrap.clientHeight : window.innerHeight;
+        // 场景
+        this.scene = new THREE.Scene();
+        // 创建相机Camera
         this.camera = new THREE.PerspectiveCamera(70, width / height, 10, 20000);
         // 创建渲染器Rendere
         this.renderer = new THREE.WebGLRenderer({
@@ -34,11 +33,16 @@ class Vthree {
             canvas: this.element,
             preserveDrawingBuffer: true,
         });
-
+        // 性能监视器
+        this.stats = new Stats();
+        // 
+        this.gui = null;
         // 后期
-        this.bloomComposer = null;
-        // 选中物体
+        this.composer = null;
+
+        // 点击选中物体
         this.selectObject = null;
+
         // 创建视图控制器OrbitControls，鼠标控制
         this.controls = new OrbitControls(this.camera, this.element);
 
@@ -50,44 +54,51 @@ class Vthree {
             gridHelper: {
                 visible: false
             },
-            ambientLight: {
-                visible: false
-            }
         }
         // 辅助元素
         this.helper();
     }
+    /** @description 创建画布  */
+    createsNode() {
+        let canvas = document.createElement('canvas')
+        this.element = canvas;
+    }
     /**
-    * @description 创建时进行一些初始化
+    * @description 创建时进行一些初始化--添加
     */
     createInit() {
         // 相机设置
         this.camera.position.set(0, 5000, 10000);
+        this.camera.lookAt(0, 0, 0);
         // 设置默认背景色
         this.renderer.setClearColor('#244780', 1);
         this.renderer.outputEncoding = THREE.sRGBEncoding;
-        //开启阴影渲染
+        // 开启阴影渲染
         this.renderer.shadowMap = true;
-        //右键拖拽
+        // 此代码一定要加上，必不可少
+        // this.renderer.autoClear = false
+        // 右键拖拽
         this.controls.enablePan = true;
         /**---------------------------------------------------------------------------- */
         // 适应浏览器大小
         window.addEventListener("resize", this.onResize.bind(this), { passive: true });
         window.addEventListener("click", this.mouseClick.bind(this), { passive: true });
         /**增加元素操作应放在这里 */
-        // 渲染
-        this.light()
-        this.render();
+        // 添加性能监视器
+        this.wrap.appendChild(this.stats.dom);
+        // 渲染 
+        this.effect();
         // 星星
         this.star();
-        // 增加辅助元素
+        // 辅助元素
         this.setHelper();
+        // 光源
+        this.light();
+
+        // 执行render
+        this.render();
+
         /**---------------------------------------------------------------------------- */
-    }
-    /** @description 创建画布  */
-    before() {
-        let canvas = document.createElement('canvas')
-        this.element = canvas;
     }
     mount(wrap) {
         // 挂载元素
@@ -128,45 +139,57 @@ class Vthree {
         const starField = new THREE.Points(geometry, material);
         // this.scene.add(starField);
     }
-    // 高亮
+    // 光源管理
     light() {
-        let scene = this.scene;
-        let camera = this.camera;
-        let renderer = this.renderer
-        // RenderPass这个通道会渲染场景，但不会将渲染结果输出到屏幕上
-        const renderScene = new RenderPass(scene, camera)
-        // THREE.OutlinePass(resolution, scene, camera, selectedObjects)
-        // resolution 分辨率
-        // scene 场景
-        // camera 相机
-        // selectedObjects 需要选中的物体对象, 传入需要边界线进行高亮处理的对象
-        const outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
-        outlinePass.renderToScreen = true;
-        outlinePass.edgeStrength = 3 //粗
-        outlinePass.edgeGlow = 2 //发光
-        outlinePass.edgeThickness = 2 //光晕粗
-        outlinePass.pulsePeriod = 1 //闪烁
-        outlinePass.usePatternTexture = false //是否使用贴图
-        outlinePass.visibleEdgeColor.set('yellow'); // 设置显示的颜色
-        outlinePass.hiddenEdgeColor.set('white'); // 设置隐藏的颜色
+        // 平行光
+        const ambientLight = new THREE.AmbientLight('#fff');
+        // 点光源
+        const pointLight = new THREE.PointLight(0xffffff, 1);
 
-        //创建效果组合器对象，可以在该对象上添加后期处理通道，通过配置该对象，使它可以渲染我们的场景，并应用额外的后期处理步骤，在render循环中，使用EffectComposer渲染场景、应用通道，并输出结果。
-        this.bloomComposer = new EffectComposer(renderer)
-        this.bloomComposer.setSize(window.innerWidth, window.innerWidth);
-        this.bloomComposer.addPass(renderScene);
-        // 眩光通道bloomPass插入到composer
-        this.bloomComposer.addPass(outlinePass)
-        this.bloomComposer.render()
+        this.scene.add(ambientLight);
+
+        this.camera.add(pointLight)
+    }
+    // 高亮
+    effect() {
+        const params = {
+            exposure: 2,
+            bloomThreshold: 0,
+            bloomStrength: 3,
+            bloomRadius: 1
+        };
+        let renderer = this.renderer
+
+
+        this.composer = new EffectComposer(renderer);
+
+        const renderScene = new RenderPass(this.scene, this.camera);
+        this.composer.addPass(renderScene);
+
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1, 0, 0);
+        // bloomPass.renderToScreen = true;
+        bloomPass.threshold = params.bloomThreshold;
+        bloomPass.strength = params.bloomStrength;
+        bloomPass.radius = params.bloomRadius;
+
+        this.bloomPass = bloomPass;
+        // this.composer.addPass(bloomPass);
+
+
     }
     // 渲染函数
     render() {
-
         requestAnimationFrame(this.render.bind(this));
 
-        this.controls.update();
         // 后期处理
-        // this.bloomComposer.render();
+        this.composer.render();
 
+        // 鼠标控制
+        this.controls.update();
+
+        // 性能监视器
+        this.stats.update();
+        // 动画
         TWEEN.update();
         this.renderer.render(this.scene, this.camera);
     }
@@ -177,7 +200,6 @@ class Vthree {
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
         var raycaster = new THREE.Raycaster();
-        // console.log(mouse.x, mouse.y)
         raycaster.setFromCamera(mouse, this.camera);
         // 计算物体和射线的焦点
         var intersects = raycaster.intersectObjects(scene.children, true);
@@ -211,6 +233,8 @@ class Vthree {
     config(options) {
         this.data.axesHelper.visible = options.axesHelper ? options.axesHelper : false;
         this.data.gridHelper.visible = options.gridHelper ? options.gridHelper : false;
+        // 增加辅助元素
+        this.setHelper();
     }
     // 清空场景
     clear() {
@@ -245,10 +269,6 @@ class Vthree {
         var gridHelper = new THREE.GridHelper(size, divisions);
         gridHelper.position.set(0, -10000, 0)
         this.data.gridHelper = gridHelper;
-
-        // 光源
-        var ambientLight = new THREE.AmbientLight('#fff');
-        this.data.ambientLight = ambientLight
     }
     // 辅助元素显示控制 shouled be add once 
     setHelper() {
@@ -260,6 +280,7 @@ class Vthree {
             }
         }
     }
+
 }
 export default {
     install: (app, options) => {
@@ -267,7 +288,6 @@ export default {
         app.config.globalProperties.$vthree = vthree
         app.config.globalProperties.$tween = TWEEN;
         // app.directive('click', {
-
         //     // 当被绑定的元素插入到 DOM 中时……
         //     beforeMount: function (el) {
         //         console.log(el)
@@ -276,7 +296,7 @@ export default {
         // 混入生命周期
         app.mixin({
             // clear before Create 
-            beforeCreate() {
+            unmounted() {
                 // clear THREE.scene
                 vthree.clear();
             },

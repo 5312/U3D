@@ -10,9 +10,10 @@ import {
   DoubleSide,
   CylinderBufferGeometry,
   Group,
-  Vector2,
+  MeshPhongMaterial,
   Vector3
 } from 'three';
+import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
 /**
  * @description v隧道构建类
  * @author YF
@@ -191,11 +192,6 @@ class Association extends Tunnel {
     left.rotateX(Math.PI / 2);
 
     // right
-    var geometry1 = new PlaneBufferGeometry(width, rlh);
-    var material1 = new MeshBasicMaterial({
-      color: '#0546BE',
-      side: DoubleSide
-    });
     var right = new Mesh(geometry1, material1);
     right.name = 'right'
     right.translateY(-height / 2)
@@ -212,23 +208,26 @@ class Association extends Tunnel {
     });//材质对象
     var top = new Mesh(geometry2, material2);//网格模型对象
     top.name = 'top'
+    top.translateZ(-rlh)
+    top.rotateX(-Math.PI / 2)
+    top.rotateZ(Math.PI / 2)
+
     /** @type {边框} */
     let edges = new EdgesGeometry(geometry2, 1);
 
     /** @type {边框材质} */
     let edgesLine = new LineBasicMaterial({
+      linewidth: 5,
+      transparent: true,
+      opacity: 0.8,
       color: '#00C0FF',
-      emissive: '#00C0FF'
-    });//'#244780'
+    });
     edgesLine.depthTest = true;//深度测试，开启则边框透明
+    // 创建线框分段
     let meshLine = new LineSegments(edges, edgesLine);
     meshLine.name = 'meshLine'
-
-    top.translateZ(-rlh)
-    top.rotateX(-Math.PI / 2)
-    top.rotateZ(Math.PI / 2)
-
     top.add(meshLine);
+
     // put into group
     this.pushGroup(bottom, right, left, top)//
     this.group.name = name;

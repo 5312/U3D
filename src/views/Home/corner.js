@@ -56,6 +56,7 @@ class Corner extends Tunnel {
     var bottom = new Mesh(geometry, material);
     bottom.rotateX(Math.PI / 2)
     bottom.name = 'bottom'
+
     // out-slider /圆柱的顶部半径 /圆柱的底部半径 /圆柱的高度 / 圆柱侧面周围的分段数/ 圆柱侧面沿着其高度的分段数/闭合/起始角度/ 圆柱底面圆扇区的中心角
     var geometry2 = new CylinderBufferGeometry(radius, radius, rlh, segments, segments, true, thetaStart, thetaLength);
     var material2 = new MeshBasicMaterial({
@@ -67,32 +68,30 @@ class Corner extends Tunnel {
     slider.translateY(rlh / 2)
     slider.rotateX(Math.PI)
     slider.rotateY(Math.PI / 2)
+
     var geometry3 = new CylinderBufferGeometry(radius - 300, radius - 300, rlh, segments, segments, true, thetaStart, thetaLength);
-    var material3 = new MeshBasicMaterial({
-      color: '#0546BE',//三角面颜色
-      side: DoubleSide//两面可见
-    });//材质对象
-    var inslider = new Mesh(geometry3, material3);//网格模型对象
+
+    var inslider = new Mesh(geometry3, material2);//网格模型对象
     inslider.name = 'inslider'
     inslider.translateY(rlh / 2)
     inslider.rotateX(Math.PI)
     inslider.rotateY(Math.PI / 2)
     // in-slider 
     // 圆环
-    var geometry3 = new TorusBufferGeometry((radius - height / 2), height / 2, 6, segments, thetaLength);//圆环的圆心角
-    var material3 = new MeshBasicMaterial({
+    var geometry4 = new TorusBufferGeometry((radius - height / 2), height / 2, 6, segments, thetaLength);//圆环的圆心角
+    var material4 = new MeshBasicMaterial({
       transparent: true,//开启透明度
       opacity: 0.5,//设置透明度具体值
       color: '#0546BE',//三角面颜色
       side: FrontSide,//两面可见
     });
-    var top = new Mesh(geometry3, material3);
+    var top = new Mesh(geometry4, material4);
     top.name = 'top'
     top.translateY(height - 100)
     top.rotateX(Math.PI / 2)
 
     /** @type {边框} */
-    let edges = new EdgesGeometry(geometry3, 2);
+    let edges = new EdgesGeometry(geometry4, 2);
 
     /** @type {边框材质} */
     let edgesLine = new LineBasicMaterial({ color: '#00C0FF' });//'#244780'
