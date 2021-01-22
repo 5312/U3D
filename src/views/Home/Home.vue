@@ -79,6 +79,8 @@ export default {
         axesHelper: true,
         gridHelper: true,
       });
+       vthree.data.gridHelper.position.set(0, -1000, 0)
+      vthree.data.gridHelper.rotation.set(0, 0, 0)
       // 隧道
       let array = this.data.data;
       let association = new Association(vthree.scene, this.data);

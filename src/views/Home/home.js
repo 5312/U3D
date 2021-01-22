@@ -10,7 +10,6 @@ import {
   DoubleSide,
   CylinderBufferGeometry,
   Group,
-  MeshPhongMaterial,
   Vector3
 } from 'three';
 import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';

@@ -37,10 +37,11 @@ export default {
       // 挂载 
       app.mount('.wrap')
       app.config({
-        axesHelper: false,
-        gridHelper: false,
+        axesHelper: true,
+        gridHelper: true,
       })
-      app.camera.position.set(0,0,1000)
+      app.camera.position.set(0,100,3000)
+      app.data.gridHelper.rotation.set(Math.PI / 2, 0, 0)
       let line = new Line(app.scene)
       line.create();
       // curve(app.scene)

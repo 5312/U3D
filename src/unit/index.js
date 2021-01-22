@@ -263,11 +263,13 @@ class Vthree {
         var axesHelper = new THREE.AxesHelper(5000);
         this.data.axesHelper = axesHelper;
 
-        // 辅助网格
-        var size = 1000000;
+        // 辅助网格 -- 一格一百
+        var size = 100000;
         var divisions = 1000;
+
         var gridHelper = new THREE.GridHelper(size, divisions);
-        gridHelper.position.set(0, -10000, 0)
+        gridHelper.position.set(0, 0,)
+
         this.data.gridHelper = gridHelper;
     }
     // 辅助元素显示控制 shouled be add once 
