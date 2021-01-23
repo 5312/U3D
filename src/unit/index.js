@@ -33,6 +33,8 @@ class Vthree {
             canvas: this.element,
             preserveDrawingBuffer: true,
         });
+        //
+        this.clock = new THREE.Clock();
         // 性能监视器
         this.stats = new Stats();
         // 
@@ -46,17 +48,6 @@ class Vthree {
         // 创建视图控制器OrbitControls，鼠标控制
         this.controls = new OrbitControls(this.camera, this.element);
 
-        // 配置
-        this.data = {
-            axesHelper: {
-                visible: false,
-            },
-            gridHelper: {
-                visible: false
-            },
-        }
-        // 辅助元素
-        this.helper();
     }
     /** @description 创建画布  */
     createsNode() {
@@ -90,8 +81,7 @@ class Vthree {
         this.effect();
         // 星星
         this.star();
-        // 辅助元素
-        this.setHelper();
+
         // 光源
         this.light();
 
@@ -158,40 +148,39 @@ class Vthree {
             bloomStrength: 3,
             bloomRadius: 1
         };
-        let renderer = this.renderer
-
-
-        this.composer = new EffectComposer(renderer);
+        this.composer = new EffectComposer(this.renderer);
+        this.composer.renderToScreen = true;
 
         const renderScene = new RenderPass(this.scene, this.camera);
         this.composer.addPass(renderScene);
 
         const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1, 0, 0);
-        // bloomPass.renderToScreen = true;
+        bloomPass.renderToScreen = true;
         bloomPass.threshold = params.bloomThreshold;
         bloomPass.strength = params.bloomStrength;
         bloomPass.radius = params.bloomRadius;
 
-        this.bloomPass = bloomPass;
         // this.composer.addPass(bloomPass);
-
-
     }
     // 渲染函数
     render() {
-        requestAnimationFrame(this.render.bind(this));
 
+        var delta = this.clock.getDelta();
         // 后期处理
-        this.composer.render();
+        this.composer.render(delta);
 
         // 鼠标控制
-        this.controls.update();
+        this.controls.update(delta);
 
         // 性能监视器
-        this.stats.update();
+        this.stats.update(delta);
         // 动画
         TWEEN.update();
+
         this.renderer.render(this.scene, this.camera);
+
+        requestAnimationFrame(this.render.bind(this));
+
     }
     // 选中
     mouseClick(event) {
@@ -229,13 +218,7 @@ class Vthree {
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
     }
-    // 配置
-    config(options) {
-        this.data.axesHelper.visible = options.axesHelper ? options.axesHelper : false;
-        this.data.gridHelper.visible = options.gridHelper ? options.gridHelper : false;
-        // 增加辅助元素
-        this.setHelper();
-    }
+
     // 清空场景
     clear() {
         while (this.scene.children.length > 0) {
@@ -255,31 +238,6 @@ class Vthree {
 
             }
             this.scene.remove(this.scene.children[0]);
-        }
-    }
-    // 辅助元素
-    helper() {
-        // 复制坐标系
-        var axesHelper = new THREE.AxesHelper(5000);
-        this.data.axesHelper = axesHelper;
-
-        // 辅助网格 -- 一格一百
-        var size = 100000;
-        var divisions = 1000;
-
-        var gridHelper = new THREE.GridHelper(size, divisions);
-        gridHelper.position.set(0, 0,)
-
-        this.data.gridHelper = gridHelper;
-    }
-    // 辅助元素显示控制 shouled be add once 
-    setHelper() {
-        const config = this.data;
-        for (const object3d in config) {
-            if (Object.hasOwnProperty.call(config, object3d)) {
-                const element = config[object3d];
-                if (element.visible) this.scene.add(element);
-            }
         }
     }
 

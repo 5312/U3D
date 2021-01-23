@@ -30,11 +30,7 @@ export default {
        let vthree = this.$vthree;
       // 挂载 
       vthree.mount('.blue');
-      // 配置 
-      vthree.config({
-        axesHelper: true,
-        gridHelper: true,
-      });
+      
       let tunnel = new Tunnel(vthree.scene,this.data);
       tunnel.init();
     },

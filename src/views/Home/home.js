@@ -10,7 +10,9 @@ import {
   DoubleSide,
   CylinderBufferGeometry,
   Group,
-  Vector3
+  Vector3,
+  AxesHelper,
+  GridHelper
 } from 'three';
 import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
 /**
@@ -232,8 +234,21 @@ class Association extends Tunnel {
     this.group.name = name;
     // 当前组位置
     this.setPosition();
-  }
 
+  }
+  // 辅助元素
+  helper() {
+    // 复制坐标系
+    var axesHelper = new AxesHelper(5000);
+    this.scene.add(axesHelper)
+    // 辅助网格 -- 一格一百
+    var size = 100000;
+    var divisions = 100;
+
+    var gridHelper = new GridHelper(size, divisions);
+    gridHelper.position.set(0, -1000, 0)
+    this.scene.add(gridHelper)
+  }
 }
 /**
  * @description 指示牌 

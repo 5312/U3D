@@ -1,6 +1,5 @@
 <template>
-  <div class="wrap">
-  </div>
+  <div class="wrap"></div>
 </template>
 <script>
 import load from '../../unit/glbload.js'
@@ -34,14 +33,13 @@ export default {
       let vthree = this.$vthree;
       // 挂载 
       vthree.mount('.wrap')
-      load({url:'Glb/laoya/laoya.glb', light : false, dele : false }).then(res =>{
-        vthree.scene.add(res.scene)
-        res.scene.position.set(0, 0, 0)
-        res.scene.scale.set(100, 100, 100)
-        // res.scene.rotateY(Math.PI /2)
-        console.log(res)
-      })
-    
+      const res = await load({ url: 'Glb/laoya/laoya.glb', light: false })
+      vthree.scene.add(res.scene)
+      // res.scene.position.set(0, 0, 0)
+      res.scene.scale.set(500, 500, 500)
+      console.log(res)
+
+
     },
   },
 }
@@ -50,6 +48,5 @@ export default {
 .wrap {
   width: 100%;
   height: 100%;
-
 }
 </style>

@@ -36,12 +36,8 @@ export default {
       let app = this.$vthree;
       // 挂载 
       app.mount('.wrap')
-      app.config({
-        axesHelper: true,
-        gridHelper: true,
-      })
+
       app.camera.position.set(0,100,3000)
-      app.data.gridHelper.rotation.set(Math.PI / 2, 0, 0)
       let line = new Line(app.scene)
       line.create();
       // curve(app.scene)

@@ -74,13 +74,7 @@ export default {
       let e = this
       // 挂载 
       vthree.mount('.home');
-        // 配置 
-      vthree.config({
-        axesHelper: true,
-        gridHelper: true,
-      });
-       vthree.data.gridHelper.position.set(0, -1000, 0)
-      vthree.data.gridHelper.rotation.set(0, 0, 0)
+
       // 隧道
       let array = this.data.data;
       let association = new Association(vthree.scene, this.data);
@@ -88,6 +82,7 @@ export default {
         const element = array[i];
         association.planeBuffer(element);
       }
+      association.helper()
       // 拐角
       let corner = new Corner(vthree.scene, this.corner);
       corner.create();
