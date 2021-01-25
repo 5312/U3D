@@ -11,6 +11,16 @@ class Line {
   */
   create() {
 
+
+    this.allGroup();
+
+    this.bottom();
+
+    this.groupOne();
+
+    this.helper()
+  }
+  bottom() {
     var geometry = new THREE.PlaneBufferGeometry(1000, 100)
 
     var material = new THREE.MeshBasicMaterial({
@@ -20,14 +30,7 @@ class Line {
 
     // Create the final object to add to the scene
     var curveObject = new THREE.Mesh(geometry, material);
-
-    this.allGroup();
-
-    this.groupOne();
-
-
     this.group.add(curveObject)
-    this.helper()
   }
   allGroup() {
     this.group = new THREE.Group();
@@ -55,6 +58,9 @@ class Line {
 
     this.group.add(group)
     this.groupTwo(group);
+  }
+  wall() {
+
   }
   groupTwo(groupOne) {
     const geometry1 = new THREE.PlaneBufferGeometry(100, 400)
@@ -88,6 +94,7 @@ class Line {
     gridHelper.rotation.set(Math.PI / 2, 0, 0)
     this.scene.add(gridHelper)
   }
+
 }
 export {
   Line
