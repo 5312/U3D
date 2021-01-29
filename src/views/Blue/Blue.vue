@@ -30,7 +30,7 @@ export default {
        let vthree = this.$vthree;
       // 挂载 
       vthree.mount('.blue');
-      
+      // 更新
       let tunnel = new Tunnel(vthree.scene,this.data);
       tunnel.init();
     },

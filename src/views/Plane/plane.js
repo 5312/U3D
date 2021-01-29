@@ -21,6 +21,8 @@ class Line {
     this.clone();
     this.helper();
 
+    //
+    this.mainRoad();
   }
   bottom() {
     let height = 100,
@@ -194,6 +196,58 @@ class Line {
     // 加入组
     groupOne.add(group2)
   }
+  mainRoad() {
+    let height = 100, width = 5000;
+    // 主干道
+    let group = new THREE.Group();
+    group.name = 'mainRoad'
+    /** -------bottom---------------------------------------- */
+    const geometry = new THREE.PlaneBufferGeometry(height, width)
+    const material = new THREE.MeshBasicMaterial({
+      color: '#000',
+      side: THREE.DoubleSide
+    });
+    const bottom = new THREE.Mesh(geometry, material);
+    bottom.name = 'bottom'
+
+    group.add(bottom)
+    /** --------left--------------------------------------- */
+    const material1 = new THREE.MeshBasicMaterial({
+      color: '#0546BE',
+      side: THREE.DoubleSide
+    })
+    let left = new THREE.Mesh(geometry, material1);
+    left.name = 'left';
+    left.position.set(-50, 0, 50)
+    left.rotation.set(0, Math.PI / 2, 0)
+    group.add(left);
+    /** --------right--------------------------------------- */
+    const material2 = new THREE.MeshBasicMaterial({
+      color: '#0546BE',
+      side: THREE.DoubleSide
+    })
+    let right = new THREE.Mesh(geometry, material2);
+    right.name = 'right';
+    right.position.set(50, 0, 50)
+    right.rotation.set(0, Math.PI / 2, 0)
+    group.add(right);
+    /** ---------top-------------------------------------- */
+    var geometry2 = new THREE.CylinderBufferGeometry(height / 2, height / 2, width, 3, 3, true, 0, Math.PI);
+    var material3 = new THREE.MeshBasicMaterial({
+      transparent: true,//开启透明度
+      opacity: 0.5,//设置透明度具体值
+      color: '#0546BE',//三角面颜色
+      side: THREE.DoubleSide//两面可见
+    });//材质对象
+    var top = new THREE.Mesh(geometry2, material3);//网格模型对象
+    top.name = 'top'
+    top.position.set(0, 0, 100)
+    top.rotation.set(0, -Math.PI / 2, 0)
+    group.add(top)
+    /** ----------------------------------------------- */
+    group.position.set(550, 0, 0)
+    this.scene.add(group)
+  }
   // 辅助元素
   helper() {
     // 复制坐标系
@@ -218,6 +272,8 @@ class Line {
     this.scene.add(clone)
   }
 }
+
+
 export {
   Line
 }
