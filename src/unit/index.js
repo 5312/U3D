@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+
 
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
@@ -66,7 +66,7 @@ class Vthree {
         this.renderer.outputEncoding = THREE.sRGBEncoding;
         // 开启阴影渲染
         this.renderer.shadowMap = true;
-        // 此代码一定要加上，必不可少
+        // // 此代码一定要加上，必不可少
         // this.renderer.autoClear = false
         // 右键拖拽
         this.controls.enablePan = true;
@@ -148,19 +148,19 @@ class Vthree {
             bloomStrength: 3,
             bloomRadius: 1
         };
+        let el = window,
+            scene = this.scene,
+            camera = this.camera;
+        //创建效果组合器对象，可以在该对象上添加后期处理通道，通过配置该对象，使它可以渲染我们的场景，并应用额外的后期处理步骤，在render循环中，使用EffectComposer渲染场景、应用通道，并输出结果。
         this.composer = new EffectComposer(this.renderer);
-        this.composer.renderToScreen = true;
+        this.composer.setSize(this.wrap.clientWidth, this.wrap.clientHeight);
 
         const renderScene = new RenderPass(this.scene, this.camera);
         this.composer.addPass(renderScene);
 
-        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1, 0, 0);
-        bloomPass.renderToScreen = true;
-        bloomPass.threshold = params.bloomThreshold;
-        bloomPass.strength = params.bloomStrength;
-        bloomPass.radius = params.bloomRadius;
 
-        // this.composer.addPass(bloomPass);
+
+
     }
     // 渲染函数
     render() {
@@ -177,7 +177,7 @@ class Vthree {
         // 动画
         TWEEN.update();
 
-        this.renderer.render(this.scene, this.camera);
+        // this.renderer.render(this.scene, this.camera);
 
         requestAnimationFrame(this.render.bind(this));
 

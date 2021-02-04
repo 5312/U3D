@@ -77,7 +77,7 @@ export default {
 
       // 隧道
       let array = this.data.data;
-      let association = new Association(vthree.scene, this.data);
+      let association = new Association(vthree.scene, this.data,vthree.camera,vthree.composer);
       for (let i = 0; i < array.length; i++) {
         const element = array[i];
         association.planeBuffer(element);

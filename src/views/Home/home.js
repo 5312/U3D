@@ -1,3 +1,6 @@
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader';
 //threejs
 import {
   Mesh,
@@ -11,10 +14,10 @@ import {
   CylinderBufferGeometry,
   Group,
   Vector3,
+  Vector2,
   AxesHelper,
   GridHelper
 } from 'three';
-import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
 /**
  * @description v隧道构建类
  * @author YF
@@ -22,9 +25,11 @@ import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
  * @class Tunnel
  */
 class Tunnel {
-  constructor(scene, group) {
+  constructor(scene, group, camera, composer) {
     this.scene = scene;
+    this.camera = camera;
     this.data = group.data;
+    this.composer = composer;
 
     this.position = group.position
     this.rotation = group.rotation
@@ -49,6 +54,7 @@ class Tunnel {
     this.mountain();
     // 物体位置
     this.scene.add(this.group);
+
 
   }
   /**
@@ -157,8 +163,9 @@ class Tunnel {
  * @extends {Tunnel}
  */
 class Association extends Tunnel {
-  constructor(scene, group) {
-    super(scene, group);
+  constructor(scene, camera, group, composer) {
+    super(scene, camera, group, composer);
+
   }
   /** @param {*} options ={name,position} */
   planeBuffer(options) {
@@ -235,6 +242,7 @@ class Association extends Tunnel {
     // 当前组位置
     this.setPosition();
 
+
   }
   // 辅助元素
   helper() {
@@ -248,6 +256,34 @@ class Association extends Tunnel {
     var gridHelper = new GridHelper(size, divisions);
     gridHelper.position.set(0, -1000, 0)
     this.scene.add(gridHelper)
+    this.outlinePass()
+  }
+  outlinePass() {
+    console.log()
+    const cube2 = this.scene.children;//[this.scene.getObjectByName('meshLine')]//
+    // console.log(cube2)
+    let scene = this.scene, camera = this.camera
+
+    const outlinePass = new OutlinePass(new Vector2(window.offsetWidth, window.offsetHeight), scene, camera, cube2);
+
+    // outlinePass.renderToScreen = true;
+    outlinePass.edgeStrength = 2 //粗
+    outlinePass.edgeGlow = 2 //发光
+    outlinePass.edgeThickness = 2 //光晕粗
+    outlinePass.pulsePeriod = 0 //闪烁
+    outlinePass.usePatternTexture = false //是否使用贴图
+    outlinePass.visibleEdgeColor.set('yellow'); // 设置显示的颜色
+    outlinePass.hiddenEdgeColor.set('#00C0FF'); // 设置隐藏的颜色
+
+    //抗锯齿
+    var width = window.clientWidth; //全屏状态对应窗口宽度
+    var height = window.clientWidth; //全屏状态对应窗口高度
+
+    var FXAAShaderPass = new ShaderPass(FXAAShader);
+
+    // 眩光通道bloomPass插入到composer
+    this.composer.addPass(outlinePass)
+    // this.composer.addPass(FXAAShaderPass);
   }
 }
 /**
