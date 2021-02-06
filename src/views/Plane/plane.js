@@ -271,6 +271,10 @@ class Line {
 
     this.scene.add(clone)
   }
+  // 挤压缓冲几何体
+  extrude() {
+
+  }
 }
 
 
