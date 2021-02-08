@@ -259,7 +259,6 @@ class Association extends Tunnel {
     this.outlinePass()
   }
   outlinePass() {
-    console.log()
     const cube2 = this.scene.children;//[this.scene.getObjectByName('meshLine')]//
     // console.log(cube2)
     let scene = this.scene, camera = this.camera
@@ -276,14 +275,15 @@ class Association extends Tunnel {
     outlinePass.hiddenEdgeColor.set('#00C0FF'); // 设置隐藏的颜色
 
     //抗锯齿
-    var width = window.clientWidth; //全屏状态对应窗口宽度
-    var height = window.clientWidth; //全屏状态对应窗口高度
+    var width = window.innerWidth; //全屏状态对应窗口宽度; //全屏状态对应窗口宽度
+    var height = window.innerHeight; //全屏状态对应窗口高度
 
     var FXAAShaderPass = new ShaderPass(FXAAShader);
 
+    FXAAShaderPass.uniforms['resolution'].value.set(1 / width, 1 / height);
     // 眩光通道bloomPass插入到composer
     this.composer.addPass(outlinePass)
-    // this.composer.addPass(FXAAShaderPass);
+    this.composer.addPass(FXAAShaderPass);
   }
 }
 /**
