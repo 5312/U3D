@@ -16,7 +16,8 @@ import {
   Vector3,
   Vector2,
   AxesHelper,
-  GridHelper
+  GridHelper,
+  Color
 } from 'three';
 /**
  * @description v隧道构建类
@@ -253,7 +254,7 @@ class Association extends Tunnel {
     var size = 100000;
     var divisions = 100;
 
-    var gridHelper = new GridHelper(size, divisions);
+    var gridHelper = new GridHelper(size, divisions, '#fff', '#ddd');
     gridHelper.position.set(0, -1000, 0)
     this.scene.add(gridHelper)
     this.outlinePass()
@@ -263,24 +264,26 @@ class Association extends Tunnel {
     // console.log(cube2)
     let scene = this.scene, camera = this.camera
 
-    const outlinePass = new OutlinePass(new Vector2(window.offsetWidth, window.offsetHeight), scene, camera, cube2);
+    const outlinePass = new OutlinePass(new Vector2(this.scene.width, this.scene.height), scene, camera, cube2);
 
-    // outlinePass.renderToScreen = true;
+    console.log(this)
+
     outlinePass.edgeStrength = 2 //粗
     outlinePass.edgeGlow = 2 //发光
     outlinePass.edgeThickness = 2 //光晕粗
     outlinePass.pulsePeriod = 0 //闪烁
     outlinePass.usePatternTexture = false //是否使用贴图
-    outlinePass.visibleEdgeColor.set('yellow'); // 设置显示的颜色
+    outlinePass.visibleEdgeColor.set('#00C0FF'); // 设置显示的颜色
     outlinePass.hiddenEdgeColor.set('#00C0FF'); // 设置隐藏的颜色
 
     //抗锯齿
-    var width = window.innerWidth; //全屏状态对应窗口宽度; //全屏状态对应窗口宽度
-    var height = window.innerHeight; //全屏状态对应窗口高度
+    var width = this.scene.width; //全屏状态对应窗口宽度; //全屏状态对应窗口宽度
+    var height = this.scene.height; //全屏状态对应窗口高度
 
     var FXAAShaderPass = new ShaderPass(FXAAShader);
-
+    console.log(FXAAShaderPass)
     FXAAShaderPass.uniforms['resolution'].value.set(1 / width, 1 / height);
+
     // 眩光通道bloomPass插入到composer
     this.composer.addPass(outlinePass)
     this.composer.addPass(FXAAShaderPass);

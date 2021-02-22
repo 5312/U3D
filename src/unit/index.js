@@ -25,6 +25,9 @@ class Vthree {
         let height = this.wrap ? this.wrap.clientHeight : window.innerHeight;
         // 场景
         this.scene = new THREE.Scene();
+
+        this.scene.width = width;
+        this.scene.height = height
         // 创建相机Camera
         this.camera = new THREE.PerspectiveCamera(70, width / height, 10, 20000);
         // 创建渲染器Rendere
@@ -157,9 +160,6 @@ class Vthree {
 
         const renderScene = new RenderPass(this.scene, this.camera);
         this.composer.addPass(renderScene);
-
-
-
 
     }
     // 渲染函数
