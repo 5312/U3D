@@ -186,8 +186,10 @@ class Vthree {
     mouseClick(event) {
         var mouse = new THREE.Vector2();
         let scene = this.scene;
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        let windowWidth = window.innerWidth;
+        let windowHeight = window.innerHeight;
+        mouse.x = (event.clientX / windowWidth) * 2 - 1;
+        mouse.y = -(event.clientY / windowHeight) * 2 + 1;
         var raycaster = new THREE.Raycaster();
         raycaster.setFromCamera(mouse, this.camera);
         // 计算物体和射线的焦点
